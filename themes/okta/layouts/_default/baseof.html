@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+  {{ partial "head.html" . }}
+<body>
+  <div>
+    <!-- START Header -->
+    {{ partial "header.html" . }}
+    <!-- END Header -->
+    {{ block "main" . }}
+    {{ end }}
+    <!-- START Footer -->
+    {{ partial "footer.html" . }}
+    <!-- END Footer -->
+  </div>
+  <!-- START Post Footer -->
+  {{ partialCached "post-footer.html" . }}
+  <!-- END Post Footer -->
+</body>
+</html>

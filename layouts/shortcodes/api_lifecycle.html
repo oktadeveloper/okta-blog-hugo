@@ -1,0 +1,28 @@
+{{ if eq (index .Params 0) "beta" }}
+  <a href="/docs/api/getting_started/releases-at-okta#beta">
+    <span class="api-label api-label-beta {{ if len .Params | eq 2 }}{{ .Get 1 }}{{ end }}">
+      <i class="fa fa-warning"></i>Beta
+    </span>
+  </a>
+{{ end }}
+{{ if eq (index .Params 0) "ea" }}
+<a href="/docs/api/getting_started/releases-at-okta#early-access-ea">
+    <span class="api-label api-label-ea {{ if len .Params | eq 2 }}{{ .Get 1 }}{{ end }}">
+      <i class="fa fa-flag"></i>Early Access
+    </span>
+</a>
+{{ end }}
+{{ if eq (index .Params 0) "ga" }}
+<a href="/docs/api/getting_started/releases-at-okta#general-availability-ga">
+    <span class="api-label api-label-ga {{ if len .Params | eq 2 }}{{ .Get 1 }}{{ end }}">
+      <i class="fa fa-circle-o"></i>General Availability
+    </span>
+</a>
+{{ end }}
+{{ if eq (index .Params 0) "ga" }}
+<a href="/docs/api/getting_started/releases-at-okta#deprecation">
+    <span class="api-label api-label-deprecated {{ if len .Params | eq 2 }}{{ .Get 1 }}{{ end }}">
+      <i class="fa fa-fire-extinguisher"></i>Deprecated
+    </span>
+</a>
+{{ end }}
