@@ -1,0 +1,9 @@
+<div>
+    {{ range $element := (sort  (readDir "./content/docs/change-log") "Name" "desc" )}}
+        {{ if in $element.Name "index.md"}}
+	    {{ else }}
+           {{ $path := printf "%s/%s" "./content/docs/change-log" $element.Name }}
+           {{ $path | readFile | replaceRE "(---)([^-|]+)(---)" "" | markdownify  }}
+        {{ end }}
+    {{ end }}
+</div>

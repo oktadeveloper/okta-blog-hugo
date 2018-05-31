@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+
+<section class="Docs">
+	<div class="Hero Hero--docs u-Justify u-alignCenter">
+		<h1 class="Docs-title Hero-title">Get started in minutes</h1>
+		<p class="Docs-subtitle Hero-subtitle">Add authentication, authorization, and user management to your apps and APIs.</p>
+		<div id="docs-languages"></div>
+	</div>
+	<div class="Wrap">
+		<div class="Docs-container">
+			<div class="Docs-content">
+				<br>
+				<h2>Use Cases</h2>
+				<!-- START Subpages Grid -->
+				<div class="Row">
+					{{ range $element := where .Site.RegularPages "Section" "==" "use_cases" }}
+						{{ if in $element.Path "/index.md"}}
+							<div class="Column--4 Column--small-12">
+								<a href="{{ .URL }}">
+									<h3 class="h4">{{ .Title }}</h3>
+								</a>
+								<p> {{ .Params.excerpt }} </p>
+							</div>
+						{{ end }}
+					{{ end }}
+				</div>
+				<!-- END Subpages Grid -->
+
+				<h2>Reference</h2>
+				<!-- START Subpages Grid -->
+				<div class="Row">
+				{{ range where .Site.RegularPages "Section" "==" "reference" }}
+					<div class="Column--4 Column--small-12">
+						<a href="{{ .URL }}">
+							<h3 class="h4">{{ .Title }}</h3>
+						</a>
+						<p>{{ .Params.excerpt }}</p>
+					</div>
+				{{ end }}
+				</div>
+				<!-- END Subpages Grid -->
+
+				<h2>How-To</h2>
+				<!-- START Subpages Grid -->
+				<div class="Row">
+				  {% assign documents = site.reference | sort:'weight' %}
+				  {{ range where .Site.RegularPages "Section" "==" "how-to" }}
+						<div class="Column--4 Column--small-12">
+							<a href="{{ .URL }}">
+								<h3 class="h4">{{ .Title }}</h3>
+							</a>
+							<p>{{ .Params.excerpt }}</p>
+						</div>
+			  		{{ end }}
+				</div>
+				<!-- END Subpages Grid -->
+				<h2>Standards</h2>
+				<!-- <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p> -->
+				<!-- START Subpages Grid -->
+				<div class="Row">
+		{{ range where .Site.RegularPages "Section" "==" "standards" }}
+					<div class="Column--4 Column--small-12">
+						<a href="{{ .URL }}">
+							<h3 class="h4">{{ .Title }}</h3>
+						</a>
+						<p>{{ .Params.excerpt }}</p>
+					</div>
+		{{ end }}
+				</div>
+				<!-- END Subpages Grid -->
+			</div>
+		</div>
+	</div>
+</section>
+
+
+{{ end }}

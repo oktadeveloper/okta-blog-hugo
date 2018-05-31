@@ -1,0 +1,45 @@
+{{ $author := index $.Site.Data.authors (print .Params.author) }}
+<article class="BlogPost">
+
+	<header class="BlogPost-header">
+
+		<time class="BlogPost-date" datetime="{{ .Date.Format "2006-01-12" }}">
+			{{ .Date.Format "January 2, 2006" }}
+		</time>
+
+		<h1 class="BlogPost-title">{{ .Title }}</h1>
+
+		<div class="BlogPost-attribution">
+			{{ if $author.avatar }}
+				<img src="/img/{{ $author.avatar }}" alt="{{ $author.avatar }}" class="BlogPost-avatar">
+			{{ end }}
+			<span class="BlogPost-author">{{ $author.full_name }}</span>
+		</div>
+
+	</header>
+
+	<div class="BlogPost-content">
+		<p>{{ .Content }}</p>
+	</div>
+	{{ if ne .Params.comments false }}
+	<div id="disqus">
+		<div id="disqus_thread"></div>
+		<script type="text/javascript">
+		var disqus_title = '{{ .Title }}';
+		var disqus_url = '{{ .URL | absURL }}';
+
+		(function () {
+			var dsq = document.createElement('script');
+			dsq.async = true;
+			dsq.type = 'text/javascript';
+				dsq.src = '//{{ .Site.DisqusShortname }}.disqus.com/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		})();
+		</script>
+		<noscript>
+			Please enable JavaScript to view the
+			<a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus</a>.
+		</noscript>
+	</div>
+	{{ end }}
+</article>

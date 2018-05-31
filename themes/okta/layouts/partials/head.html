@@ -1,0 +1,65 @@
+<head>
+    <script>
+        var searchDomain = 'https://developer.okta.com';
+        var isProduction = window.location.hostname === 'developer.okta.com';
+        if (isProduction) {
+          // Google analytics
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', '{{ .Site.GoogleAnalytics }}', 'auto');
+          ga('send', 'pageview');
+
+          // START Google Tag Manager
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-TJ45R6');
+          // END Google Tag Manager
+        }
+
+        // TypeKit
+        (function(d) {
+          var config = {
+            kitId: 'jff5neq',
+            scriptTimeout: 3000,
+            async: true
+          },
+          h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/bwf-loadingb/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+        })(document);
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	{{ if eq (.Params.exclude) "yes" }}
+	    <meta name="robots" content="noindex,nofollow">
+	{{ end }}
+	<link type="text/css" rel="stylesheet" href="https://developer.okta.com/sites/all/themes/developer/css/master.css" media="all" />
+    <meta class="swiftype" name="title" data-type="string" content="{{ if .Page.Params.meta_title }}{{ .Page.Params.meta_title }}{{ else if .Page.Title }}{{ .Page.Title }} | {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}">
+	<meta class="swiftype" name="summary" data-type="string" content="{{ if .Page.Description }}{{ trim .Page.Description "\n" | plainify | truncate 300 }}{{ else if .Page.Params.excerpt }}{{ trim .Page.Params.excerpt "\n" | plainify | truncate 300 }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+	<link type="text/css" rel="stylesheet" href="/dist/okta.css">
+	{{/*<link type="text/css" rel="stylesheet" href="/dist/animate.css">*/}}
+
+    {{ if (fileExists "static/css/page.css") }}
+        <img src="{{ "static/css/page.css" | absURL }}" />
+    {{ end }}
+
+    {{ if (fileExists "static/css/layout.css") }}
+        <img src="{{ "static/css/layout.css" | absURL }}" />
+    {{ end }}
+
+	<title>{{ if .Page.Params.meta_title }}{{ .Page.Params.meta_title }}{{ else if .Page.Title }}{{ .Page.Title }} | {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}</title>
+	<meta name="description" content="{{ if .Page.Description }}{{ trim .Page.Description "\n" | plainify | truncate 300 }}{{ else if .Page.Params.excerpt }}{{ trim .Page.Params.excerpt "\n" | plainify | truncate 300 }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+	<link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "/feed.xml" | absURL }}"><!-- GA -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/manifest.json">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#21313a">
+    <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+</head>

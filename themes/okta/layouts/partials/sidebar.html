@@ -1,0 +1,178 @@
+<aside class="Sidebar">
+  <h2 class="Sidebar-location Sidebar-toggle h6">Navigation</h2>
+  <div class="Sidebar-close Sidebar-toggle"></div>
+  <div>
+    <h3 class="Sidebar-title"><a href = "/authentication-guide/">Authentication Guide</a></h3>
+    <ul class="Sidebar-nav">
+      <li{{ if in .URL "/auth-overview" }} class="is-active"{{ end }}>
+        <a href = "/authentication-guide/auth-overview/">OAuth 2.0 Overview</a>
+        {{ if in .URL "/auth-overview" }}
+          <ul>
+            {{ range where .Site.RegularPages "Section" "==" "authentication-guide" }}
+              <li>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+      <li{{ if in .URL "/implementing-authentication" }} class="is-active"{{ end }}>
+        <a href = "/authentication-guide/auth-overview/">Implementing OAuth 2.0</a>
+        {{ if in .URL "/implementing-authentication" }}
+          <ul>
+            {{ range where .Site.RegularPages "Section" "==" "authentication-guide" }}
+              <li>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+      <li{{ if in .URL "/social-login" }} class="is-active"{{ end }}>
+        <a href = "/authentication-guide/social-login/">Social Login</a>
+        {{ if in .URL "/social-login" }}
+          <ul>
+            {{ range where .Site.RegularPages "Section" "==" "authentication-guide" }}
+              <li>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+
+      <li{{ if in .URL "/saml-login" }} class="is-active"{{ end }}>
+        <a href = "/authentication-guide/saml-login/">SAML Login</a>
+        {{ if in .URL "/saml-login" }}
+          <ul>
+            {{ range where .Site.RegularPages "Section" "==" "authentication-guide" }}
+              <li>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+      <li{{ if in .URL "/tokens" }} class="is-active"{{ end }}>
+      <a href = "/authentication-guide/tokens/">Working With Tokens</a>
+        {{ if in .URL "/tokens" }}
+          <ul>
+            {{ range where .Site.RegularPages "Section" "==" "authentication-guide" }}
+              <li>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+    </ul>
+
+    <h3 class="Sidebar-title">Use Cases</h3>
+    <ul class="Sidebar-nav">
+      {{ range $element := where .Site.RegularPages "Section" "==" "use_cases" }}
+        {{ if in $element.Path "/index.md"}}
+          <li{{ if in $.URL $element.Dir }} class="is-active"{{ end }}>
+            <a href="{{ .URL }}">{{ .Title }}</a>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+    <h3 class="Sidebar-title">Reference</h3>
+    <ul class="Sidebar-nav">
+      <li{{ if in .Title "/getting_started" }} class="is-active"{{ end }}>
+        <a href="/docs/api/getting_started/api_test_client">Getting Started</a>
+        {{ if in .Title "/getting_started" }}
+        <ul>
+          {{ range $element := where .Site.RegularPages "Section" "==" "reference" }}
+            {{ if in $.URL "/docs/api/getting_started" }}
+              {{ if in $element.Path "/index.md" }}
+              {{ else }}
+                <li{{ if in $.URL $element.Dir }} class="is-active"{{ end }}>
+                  <a href="{{ .URL }}">{{ .Title }}</a>
+                </li>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </ul>
+        {{ end }}
+      </li>
+      <li>
+        <a href="/docs/api/resources/authn">Authentication API</a>
+        {{ if in $.URL "docs/api/resources"}}
+          <ul id="Sidebar_References" class="Sidebar-hide">
+          {{ range $element := where .Site.RegularPages "Section" "==" "docs" }}
+            <li {{ if in $.URL $element.RelPermalink }}class="is-active"{{ end }}>
+                <a href="{{ .URL }}">{{ .Title }}</a>
+            </li>
+          {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+      <li>
+        <a href="/docs/api/resources/apps">Management API</a>
+        {{ if in $.URL "docs/api/resources" }}
+          <ul id="Sidebar_Resources" class="Sidebar-hide">
+            {{ range $element := where .Site.RegularPages "Section" "==" "reference" }}
+             <li {{ if in $.URL $element.RelPermalink }}class="is-active"{{ end }}>
+              <a href="{{ .URL }}">{{ .Title }}</a>
+            </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+      {{ range $element := where .Site.RegularPages "Section" "==" "reference" }}
+        {{ if in .Site.Params.reference $element.URL }}
+        {{ else }}
+          <li {{ if in $.URL $element.RelPermalink }}class="is-active"{{ end }}>
+            <a href="{{ .URL }}">{{ .Title }}</a>
+          </li>
+        {{ end }}
+      {{ end }}
+	    <li{{ if in .URL "/change-log" }} class="is-active"{{ end }}>
+		    <a href="/docs/change-log">Change Log</a>
+            {{ if in .Title "/change-log" }}
+            <ul>
+              {{ range $element := where .Site.RegularPages "Section" "==" "reference" }}
+                {{ if in $.URL "/docs/change-log" }}
+                  {{ if in $element.Path "/index.md" }}
+                  {{ else }}
+                    <li{{ if in $.URL $element.Dir }} class="is-active"{{ end }}>
+                        <a href="{{ .URL }}">{{ .Title }}</a>
+                    </li>
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+		    </ul>
+      {{ end }}
+	    </li>
+    </ul>
+
+    <h3 class="Sidebar-title">How-To</h3>
+    <ul class="Sidebar-nav">
+      {{ range $element := where (sort .Site.RegularPages "RelPermalink" "asc" ) "Section" "==" "how-to" }}
+        {{ if in .Site.Params.how_to $element.URL }}
+          <li {{ if in $.URL $element.RelPermalink }}class="is-active"{{ end }}>
+              <a href="{{ .URL }}">{{ .Title }}</a>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+
+    <h3 class="Sidebar-title">Standards</h3>
+    <ul class="Sidebar-nav">{{ range $element := where .Site.RegularPages "Section" "==" "standards" }}
+        <li {{ if in $.URL $element.RelPermalink }}class="is-active"{{ end }}>
+            <a href="{{ .URL }}">{{ .Title }}</a>
+        </li>{{ end }}
+    </ul>
+
+    <script>
+      if (document.querySelectorAll("#Sidebar_Resources .is-active").length) {
+        document.getElementById('Sidebar_Resources').classList.remove('Sidebar-hide');
+      }
+
+      if (document.querySelectorAll("#Sidebar_References .is-active").length) {
+        document.getElementById('Sidebar_References').classList.remove('Sidebar-hide');
+      }
+    </script>
+  </div>
+</aside>
