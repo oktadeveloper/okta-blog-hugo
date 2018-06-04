@@ -1,84 +1,30 @@
-# Hugo version of okta blog
-## TODO:
+<p align="center">
+<img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" href='https://devforum.okta.com/' width="350px"/>
+</p>
 
-- Create basic project layout
-- Migrate layouts to hugo theme
-- Porting the blog over (/blog)
-- Porting the RSS feeds over (see all the .xml files in the _source directory?
-Those RSS feeds need to be duplicated in the exact same format as they are
-used for automation)
-- Port over the documentation (this should be easy). We host our developer
-documentation in this project as well currently. Eventually we'll extract it
-out into a separate project, but for now we should port it over as is.
-This will involve migrating all the /documentation content.
+# Okta developer site [![Build Status](https://travis-ci.org/okta/okta.github.io.svg?branch=source)](https://travis-ci.org/okta/okta.github.io)
 
-## How to build prod version
-```bash
-brew install hugo
-hugo
-```
+The Okta developer site ([developer.okta.com](https://developer.okta.com)) is built using [Hugo](https://gohugo.io/).
 
-## Detailed TODO:
-### Transform static files progress:
-- [x] assets
-- [x] css
-- [x] js
-- [x] img
+See a problem or want to contribute? Read [Contributing to the site](#contributing-to-the-site) below.
 
-### Transform layouts progress:
-- [x] baseof.html
-- [x] head.html
-- [x] header.html
-- [x] footer.html
-- [x] post-footer.html
+## Getting help
 
+If you have questions or need help with Okta's APIs or SDKs, visit the [Dev Forum](https://devforum.okta.com/) or ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/okta). You can also email developers@okta.com to create a support ticket.
 
-### Port over the documentation 
-- [x] We host our developer documentation in this project as well currently. 
-- [x] migrating all the /documentation content.
+### Helpful resources and links
+- [API Reference](https://developer.okta.com/docs/api/resources/)
+- [SDK Reference and Sample Code](https://developer.okta.com/documentation/)
+- [Authentication Quickstarts](https://developer.okta.com/quickstart/)
+- [Developer Blog](https://developer.okta.com/blog/)
 
-## How to migrate tags:
-```bash
-python scripts/hugo_import_jekyll.py --target=_source/_posts --output=hugo/content/blog
-for dir_name in $(ls -d1 _source/_docs/*/)
-do
-    code_path=`basename ${dir_name}`
-    python scripts/hugo_import_jekyll.py --target=_source/_docs/${code_path} --output=hugo/content/docs/${code_path}
-done
+## Contributing to the site
 
-for dir_name in $(ls -d1 _source/_code/*/)
-do
-    code_path=`basename ${dir_name}`
-    python scripts/hugo_import_jekyll.py --target=_source/_code/${code_path} --output=hugo/content/code/${code_path}
-done
+Documentation updates, bug fixes, and PRs are all welcome!
 
-for dir_name in $(ls -d1 _source/_authentication-guide/*/)
-do
-    code_path=`basename ${dir_name}`
-    python scripts/hugo_import_jekyll.py --target=_source/_authentication-guide/${code_path} --output=hugo/content/authentication-guide/${code_path}
-done
+The [wiki](https://github.com/okta/okta.github.io/wiki) will show you how to set up your local environment, and also describes our [contribution process](https://github.com/okta/okta.github.io/wiki/Contributing-to-the-Site#you-are-making-a-non-blog-change).
 
-for dir_name in $(ls -d1 _source/_use_cases/*/)
-do
-    code_path=`basename ${dir_name}`
-    python scripts/hugo_import_jekyll.py --target=_source/_use_cases/${code_path} --output=hugo/content/use_cases/${code_path}
-done
-
-for dir_name in $(ls -d1 _source/_standards/*/)
-do
-    code_path=`basename ${dir_name}`
-    python scripts/hugo_import_jekyll.py --target=_source/_standards/${code_path} --output=hugo/content/standards/${code_path}
-done
-
-python scripts/hugo_import_jekyll.py --target=_source/_docs/api/getting_started --output=hugo/content/docs/api/getting_started
-python scripts/hugo_import_jekyll.py --target=_source/_docs/how-to --output=hugo/content/how-to/
-python scripts/hugo_import_jekyll.py --target=_source/_change-log --output=hugo/content/docs/change-log
-# Usually you have alias=cp='cp -i'
-/bin/cp -rf  _source/_assets/img/* hugo/themes/okta/static/img
-/bin/cp -rf  _source/_assets/js/* hugo/themes/okta/static/js
-/bin/cp -rf _source/_assets/css/*.css hugo/themes/okta/static/css/
-/bin/cp -rf _source/_assets/fonts/* hugo/themes/okta/static/fonts
-/bin/cp -rf _source/_data/* hugo/data/
-```
-
-DEBUG
+### Building the site locally
+- [Clone and install dependencies](https://github.com/okta/okta.github.io/wiki/Setting-Up-Your-Environment)
+- Build the site with `npm start`
+- Visit [`localhost:1313`](http://localhost:1313) in your browser
