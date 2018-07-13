@@ -2,9 +2,9 @@
 <img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" href='https://devforum.okta.com/' width="350px"/>
 </p>
 
-# Okta developer site [![Build Status](https://travis-ci.org/okta/okta.github.io.svg?branch=source)](https://travis-ci.org/okta/okta.github.io)
+# Okta developer blog [![Build Status](https://travis-ci.org/oktadeveloper/okta-blog.svg?branch=source)](https://travis-ci.org/oktadeveloper/okta-blog)
 
-The Okta developer site ([developer.okta.com](https://developer.okta.com)) is built using [Hugo](https://gohugo.io/).
+The Okta developer blog ([developer.okta.com/blog](https://developer.okta.com/blog)) is built using [Hugo](https://gohugo.io/).
 
 See a problem or want to contribute? Read [Contributing to the site](#contributing-to-the-site) below.
 
@@ -16,7 +16,6 @@ If you have questions or need help with Okta's APIs or SDKs, visit the [Dev Foru
 - [API Reference](https://developer.okta.com/docs/api/resources/)
 - [SDK Reference and Sample Code](https://developer.okta.com/documentation/)
 - [Authentication Quickstarts](https://developer.okta.com/quickstart/)
-- [Developer Blog](https://developer.okta.com/blog/)
 
 ## Contributing to the site
 
