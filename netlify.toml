@@ -3,4 +3,4 @@
 
 [build]
   publish = "public"
-  command = "hugo; npx gulp"
+  command = "hugo; npx gulp; ls -l public/dist"
