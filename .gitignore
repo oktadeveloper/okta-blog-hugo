@@ -1,5 +1,4 @@
-hugo/public/
-hugo/node_modules/
+public
 .idea
 *.iml
 *.ipr
