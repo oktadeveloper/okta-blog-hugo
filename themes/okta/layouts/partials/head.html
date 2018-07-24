@@ -1,6 +1,6 @@
 <head>
     <script>
-        var searchDomain = 'https://developer.okta.com';
+        var searchDomain = '{{ .Site.BaseURL }}';
         var isProduction = window.location.hostname === 'developer.okta.com';
         if (isProduction) {
           // Google analytics
