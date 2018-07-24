@@ -25,6 +25,7 @@
         ul.menu a,
         ul.menu span {
           color: get-color('default');
+          text-decoration: none;
 
           &.active {
             color: get-color('cerise');
@@ -32,7 +33,7 @@
           }
 
           &:hover {
-            color: get-color('cerise');
+            color: get-color('white');
           }
         }
 

@@ -27,19 +27,17 @@
       justify-content: center;
     }
     a {
+      @extend %all-caps;
       display: inline-block;
       width: 132px;
       font-size: 14px;
-      font-weight: 600;
-			text-transform: uppercase;
       text-decoration: none;
-      letter-spacing: 1.5px;
-			padding: 24px 0;
+      padding: 24px 0;
       color: get-color('iron');
-			&.active,
-			&:hover {
-				color: get-color('white');
-			}
+      &.active,
+      &:hover {
+        color: get-color('white');
+      }
       i.icon.docsPage {
         text-shadow: none;
         &::before,
@@ -47,10 +45,10 @@
           font-size: 48px;
         }
       }
-		}
+    }
   }
 
-	&-content {
+  &-content {
     .Row {
       margin-left: -32px;
       margin-right: -32px;
