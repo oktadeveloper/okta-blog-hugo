@@ -1,7 +1,6 @@
 <head>
   <script>
-    {{/*var searchDomain = "{{ .Site.BaseURL | safeURL }}";*/}}
-    var searchDomain = "https://developer.okta.com";
+    var searchDomain = {{ .Site.BaseURL | safeURL }};
     var isProduction = window.location.hostname === "developer.okta.com";
 
     if (isProduction) {
