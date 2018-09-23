@@ -17,6 +17,7 @@ paginatePath = "page"
   blog = "/blog/:year/:month/:day/:filename/"
 
 [params]
+  external_url = "https://developer.okta.com"
   twitter_username = "OktaDev"
   github_username = "oktadeveloper"
   github_base_url = "https://github.com/okta/okta.github.io/tree/source/hugo/content/"
