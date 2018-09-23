@@ -12,11 +12,11 @@ tweets:
     - "Create user authorization in your ASP.NET MVC 4.x App with OpenID Connect and @OktaDev"
 ---
 
-A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site’s users, it's important that it be properly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I'll show you how to create groups and use the authorization framework that comes with ASP.NET.
+A common practice in web applications is to have a restricted area for registered users, and perhaps another for administrators. Whether this restricted access area is premium content, or simply the order history for your e-commerce site's users, it's important that it be properly secured. OpenID Connect (OIDC) makes it easy, but it can be tricky to set up in ASP.NET MVC framework. In this post, I'll show you how to create groups and use the authorization framework that comes with ASP.NET.
 
 ## Set Up the Base ASP.NET MVC 4.x Application
 
-For the base application, start by downloading our [ASP.NET MVC example from GitHub](https://github.com/oktadeveloper/okta-aspnet-mvc-example). You’ll also need to set up your application in Okta. Start by creating a [forever-free developer account](https://developer.okta.com/signup/), or logging in if you already have one. Once you're at the dashboard in the Okta developer console, create an application with the following settings:
+For the base application, start by downloading our [ASP.NET MVC example from GitHub](https://github.com/oktadeveloper/okta-aspnet-mvc-example). You'll also need to set up your application in Okta. Start by creating a [forever-free developer account](https://developer.okta.com/signup/), or logging in if you already have one. Once you're at the dashboard in the Okta developer console, create an application with the following settings:
 
 * Application type: Web
 * Allowed grant types: Authorization Code, Implicit (Hybrid) - Allow ID Token
@@ -29,7 +29,7 @@ Then open the Web.config file and add these keys to the `<appSettings>` section:
 <!-- 1. Replace these values with your Okta configuration -->
 <add key="okta:ClientId" value="{clientId}" />
 <add key="okta:ClientSecret" value="{clientSecret}" />
-<add key="okta:OrgUri" value="https://{yourOktaDomain}.com/oauth2/default" />
+<add key="okta:OrgUri" value="https://{yourOktaDomain}/oauth2/default" />
 
 <!-- 2. Update the Okta application with these values -->
 <add key="okta:RedirectUri" value="http://localhost:8080/authorization-code/callback" />
@@ -57,7 +57,7 @@ Now you just need to add these groups to the token.
 * Hover over the **API** menu item and select **Authorization Servers**.
 * Select the default authorization server (it was created for you when you created your Okta account).
 * Choose the Claims tab, and click **Add Claim**.
-* The name of the claim will be "groups", 
+* The name of the claim will be "groups",
 Select **ID Token** and **Always** from the **Include in token type** setting.
 * Choose **Groups** from the **Value Type** setting, and **Regex** from the **Filter** setting.
 * In the text box type `.*`.
@@ -159,4 +159,4 @@ If you'd like to learn more about how Okta can ease identity management for your
 * [Build a Secure To-Do App with Vue, ASP.NET Core, and Okta](https://developer.okta.com/blog/2018/01/31/build-secure-todo-app-vuejs-aspnetcore)
 * [Build an App for iOS and Android with Xamarin](https://developer.okta.com/blog/2018/01/10/build-app-for-ios-android-with-xamarin)
 
-And as always, we’d love to hear from you. Hit us up in the comments, or on Twitter [@oktadev](https://twitter.com/OktaDev).
+And as always, we'd love to hear from you. Hit us up in the comments, or on Twitter [@oktadev](https://twitter.com/OktaDev).

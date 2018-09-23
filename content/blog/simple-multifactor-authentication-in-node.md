@@ -1,6 +1,6 @@
 ---
 layout: blog_post
-title: "Simple Multifactor Authentication in Node"
+title: "Simple Multi-Factor Authentication in Node"
 author: bkelley
 date: 2018-05-22T00:00:00Z
 description: "This post explains multi-factor authentication and some challenges that developers face with it."
@@ -16,7 +16,7 @@ Maybe you implement some requirements to say your users must have uppercase and 
 
 This is where multi-factor authentication (MFA) comes in to play. By adding an extra level of security, even if someone manages to phish your user's login information, they still won't be able to sign in without access to another device such as their mobile phone or a U2F key. You might be thinking, _managing passwords is hard enough, keeping track of various devices in a secure way will be a nightmare_.
 
-To make that simpler, we’re going to use Okta to add basic authentication and MFA. Before we dive in, I’d like to give you a quick overview of what Okta does, and how it can simplify the development process for you, while ensuring best-in-class security for both you and your users.
+To make that simpler, we're going to use Okta to add basic authentication and MFA. Before we dive in, I'd like to give you a quick overview of what Okta does, and how it can simplify the development process for you, while ensuring best-in-class security for both you and your users.
 
 ## What is Okta?
 
@@ -28,7 +28,7 @@ Okta is a cloud service that allows developers to create, edit, and securely sto
 * Secure your application with (multi-factor authentication](/use_cases/mfa/)
 * And much more! Check out our [product documentation](https://developer.okta.com/documentation/)
 
-In short: we make [user account management](https://developer.okta.com/product/user-management/) a lot easier, more secure, and more scalable than what you’re probably used to. It’s super easy to [register for a free developer account](https://developer.okta.com/signup/), and when you’re done, come on back so we can learn more about building secure authentication in Node and implementing MFA with Okta.
+In short: we make [user account management](https://developer.okta.com/product/user-management/) a lot easier, more secure, and more scalable than what you're probably used to. It's super easy to [register for a free developer account](https://developer.okta.com/signup/), and when you're done, come on back so we can learn more about building secure authentication in Node and implementing MFA with Okta.
 
 
 ## Set Up the Express Application
@@ -59,7 +59,7 @@ One thing you will need in your `.env` file is an application secret, which shou
 echo "APP_SECRET=`openssl rand -base64 32`" >> .env
 ```
 
-For the next step, you need to [sign up for a free Okta Developer account](https://developer.okta.com/signup/), if you haven’t already. Once you sign up, you'll be given a unique Okta Org URL that looks similar to `https://dev-123456.oktapreview.com`. This is how you'll sign in to your account to make admin changes, so make sure to save it. You'll also need to save this in your `.env` file. Each line should have a separate environment variable with syntax like `ORG_URL=https://dev-123456.oktapreview.com`.
+For the next step, you need to [sign up for a free Okta Developer account](https://developer.okta.com/signup/), if you haven't already. Once you sign up, you'll be given a unique Okta Org URL. You'll need to save this in your `.env` file. Each line should have a separate environment variable with syntax like `ORG_URL=https://{yourOktaDomain}`.
 
 After logging into your dev console, click the **Applications** tab, click **Add Application**, then select the **Web** option. You can keep all these settings at their default for now, and just change the name. If you already know the URI(s) where you will be hosting your application, this is where you would add them. You can always come back here later.
 
@@ -69,7 +69,7 @@ Once you create the application, you will get a **Client ID** and **Client Secre
 
 ```bash
 APP_SECRET=super-secret-string
-ORG_URL=https://dev-123456.oktapreview.com
+ORG_URL=https://{yourOktaDomain}
 HOST_URL=http://localhost:8080
 CLIENT_ID=your-client-id
 CLIENT_SECRET=your-client-secret
@@ -171,7 +171,7 @@ From inside your developer portal, the default view is `Developer Console`. In o
 
 <img src="/img/blog/simple-multifactor-authentication-in-node/switch-to-classic-ui.png" alt="Switch to classic UI" width="300" class="center-image">
 
-Once you’ve enabled the Classic UI, you can click on the **Security** tab, then click **Multifactor** to select some factor types to enable. You can choose which applications will use MFA, but this step is required to enable it on any of them. There are quite a few options, but for now choose Okta Verify, Google Authenticator, and SMS Authentication.
+Once you've enabled the Classic UI, you can click on the **Security** tab, then click **Multifactor** to select some factor types to enable. You can choose which applications will use MFA, but this step is required to enable it on any of them. There are quite a few options, but for now choose Okta Verify, Google Authenticator, and SMS Authentication.
 
 <img src="/img/blog/simple-multifactor-authentication-in-node/factor-types.png" alt="Multi-factor Authentication Factor Types" width="800" class="center-image">
 
@@ -196,4 +196,4 @@ If you'd like to learn more about Node, Okta, and authentication or MFA, take a 
 * [Build User Registration with Node, React, and Okta](/blog/2018/02/06/build-user-registration-with-node-react-and-okta)
 * [Okta OIDC Middleware Documentation](https://github.com/okta/okta-oidc-js/tree/master/packages/oidc-middleware)
 
-And as always, we’d love your feedback! Hit us up in the comments below, or on Twitter [@oktadev](https://twitter.com/OktaDev).
+And as always, we'd love your feedback! Hit us up in the comments below, or on Twitter [@oktadev](https://twitter.com/OktaDev).

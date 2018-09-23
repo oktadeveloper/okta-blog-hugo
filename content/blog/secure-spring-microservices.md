@@ -4,19 +4,19 @@ title: 'Secure a Spring Microservices Architecture with Spring Security, JWTs, J
 author: mraible
 date: 2017-08-08T00:00:00Z
 description: "This tutorial shows you how you can use Spring Security, Okta, and a few Java libraries to secure your microservices architecture. Not only that, but I'll show you how to protect everything, so even your backend services can communicate securely!"
-tweets: 
+tweets:
     - "You've built a microservices architecture with Spring Boot and Spring Cloud. But what about security? This tutorial shows you how to lock everything down with Spring Security. "
     - "Learn how to use Juiser + @SpringSecurity to lock down your microservices architecture and not share keys between your gateway/load balancer and backend servers (gateway + microservices). "
 tags: [spring, microservices, spring security, jwt, juiser, java, okta sign-in widget]
 ---
 
-You've built a microservices architecture with Spring Boot and Spring Cloud. You're happy with the results, and you like how it adds resiliency to your application. You're also pleased with how it scales and how different teams can deploy microservices independently. But what about security? 
+You've built a microservices architecture with Spring Boot and Spring Cloud. You're happy with the results, and you like how it adds resiliency to your application. You're also pleased with how it scales and how different teams can deploy microservices independently. But what about security?
 
-Are you using Spring Security to lock everything down? Are your microservices locked down too, or are they just behind the firewall? 
+Are you using Spring Security to lock everything down? Are your microservices locked down too, or are they just behind the firewall?
 
 This tutorial shows you how you can use Spring Security, Okta, and a few Java libraries to secure your microservices architecture. Not only that, but I'll show you how to secure *everything*, so even your backend services communicate securely. You'll learn how to use JWTs and [Juiser](https://github.com/juiser/juiser) to read an `X-Forwarded-User` header and turn it into a Spring Security `User`.
 
-This tutorial builds off [Build a Microservices Architecture for Microbrews with Spring Boot](/blog/2017/06/15/build-microservices-architecture-spring-boot). A simple microservices architecture with Spring Boot and Spring Cloud looks as follows. It uses Stormpath’s Spring Boot Starter (it’s been modified to work with Okta while we work on building up Okta’s Java support) and Juiser, a library created by [Les Hazlewood](https://twitter.com/lhazlewood). Juiser is independent and open source, and is not tied to a particular identity provider.
+This tutorial builds off [Build a Microservices Architecture for Microbrews with Spring Boot](/blog/2017/06/15/build-microservices-architecture-spring-boot). A simple microservices architecture with Spring Boot and Spring Cloud looks as follows. It uses Stormpath's Spring Boot Starter (it's been modified to work with Okta while we work on building up Okta's Java support) and Juiser, a library created by [Les Hazlewood](https://twitter.com/lhazlewood). Juiser is independent and open source, and is not tied to a particular identity provider.
 
 <img src="/img/blog/microservices-spring-secure/spring-microservices-diagram.png" alt="Spring Boot + Cloud Microservices Architecture" width="800" class="center-image">
 
@@ -24,7 +24,7 @@ Once you've completed this tutorial, you'll have Spring Security locking things 
 
 <img src="/img/blog/microservices-spring-secure/spring-secure-microservices-diagram.png" alt="Secure Spring Microservices" width="800" class="center-image">
 
-In this tutorial, you'll build a microservices architecture with Spring Boot and related projects. To add security with Okta, you'll have to create two applications in your developer console. The first will be a "Native" application that supports the Stormpath Java SDK, and OAuth grant types authorization code, refresh token, and resource owner password. This type of application is typically reserved for native mobile applications, but it also includes the Stormpath Java SDK. This is because the Stormpath SDK was retrofitted to work with Okta, and not built specifically for the Okta API, per se. For the Angular client, you'll need a second "SPA" application. 
+In this tutorial, you'll build a microservices architecture with Spring Boot and related projects. To add security with Okta, you'll have to create two applications in your developer console. The first will be a "Native" application that supports the Stormpath Java SDK, and OAuth grant types authorization code, refresh token, and resource owner password. This type of application is typically reserved for native mobile applications, but it also includes the Stormpath Java SDK. This is because the Stormpath SDK was retrofitted to work with Okta, and not built specifically for the Okta API, per se. For the Angular client, you'll need a second "SPA" application.
 
 To begin, you'll need to clone the aforementioned article's completed project.
 
@@ -62,7 +62,7 @@ You'll also need to create an API token:
 After completing these steps, you should have the information you need to set the following environment variables.
 
 ```bash
-export STORMPATH_CLIENT_BASEURL=https://{yourOktaDomain}.com
+export STORMPATH_CLIENT_BASEURL=https://{yourOktaDomain}
 export OKTA_APPLICATION_ID={clientId}
 export OKTA_API_TOKEN={apiToken}
 export OKTA_AUTHORIZATIONSERVER_ID=default
@@ -112,7 +112,7 @@ stormpath.zuul.account.header.jwt.key.resource=classpath:rsatest.priv.pem
 stormpath.zuul.account.header.jwt.key.id=rsatest.pub.pem
 ```
 
-Copy the `rsatest.*` files from the [Stormpath Zuul example project](https://github.com/stormpath/stormpath-sdk-java/tree/master/examples/zuul-spring-cloud-starter/src/main/resources), or create new ones using the following command: 
+Copy the `rsatest.*` files from the [Stormpath Zuul example project](https://github.com/stormpath/stormpath-sdk-java/tree/master/examples/zuul-spring-cloud-starter/src/main/resources), or create new ones using the following command:
 
 ```bash
 openssl genrsa -out rsatest.priv.pem 2048
@@ -124,7 +124,7 @@ Generate the private key's corresponding `rsatest.pub.pem` public key with:
 openssl rsa -in rsatest.priv.pem -pubout > rsatest.pub.pem
 ```
 
-After copying (or generating), both `rsatest.priv.pem` and `rsatest.pub.pem` files should be in 
+After copying (or generating), both `rsatest.priv.pem` and `rsatest.pub.pem` files should be in
 `edge-service/src/main/resources`.
 
 ## Add Juiser to the Beer Catalog Service
@@ -416,11 +416,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.stormpath.sdk.servlet.http.Resolver;
 ...
 public class EdgeServiceApplication {
-    
+
     public static void main(String[] args) {
         SpringApplication.run(EdgeServiceApplication.class, args);
     }
-    	
+
     @Bean
     public RequestInterceptor forwardedAccountRequestInterceptor(
             @Qualifier("stormpathForwardedAccountHeaderValueResolver") Resolver<String> accountStringResolver) {
@@ -468,7 +468,7 @@ Open your browser and navigate to `http://localhost:8081/home`. You should see a
 
 <img src="/img/blog/microservices-spring-secure/zuul-login.png" alt="Stormpath Zuul Login" width="800" class="center-image">
 
-This page is served up from the `stormpath-zuul-spring-cloud-starter` using [Thymeleaf](http://www.thymeleaf.org/). Spring Boot auto-activates Thymeleaf when it finds it in the classpath. 
+This page is served up from the `stormpath-zuul-spring-cloud-starter` using [Thymeleaf](http://www.thymeleaf.org/). Spring Boot auto-activates Thymeleaf when it finds it in the classpath.
 
 After logging in, you should see a page displaying your user's information.
 
@@ -478,7 +478,7 @@ Click the **Logout** button to delete the cookies in your browser and end your s
 
 ## Add Okta's Sign-In Widget to the Client
 
-To use Okta's Sign-In Widget, you'll need to create an additional app in Okta, this time for a SPA (Single-Page Application). 
+To use Okta's Sign-In Widget, you'll need to create an additional app in Okta, this time for a SPA (Single-Page Application).
 
 Create an OIDC app in Okta by going to the Developer Console and navigating to **Applications** and click on the **Add Application** button. Select **SPA** and click **Next**. On the next page, specify `http://localhost:4200` as a Base URI, Login redirect URI, and Logout redirect URI. Click **Done** and you should see settings like the following.
 
@@ -511,7 +511,7 @@ export class OktaService {
 
   constructor() {
     this.widget = new OktaSignIn({
-      baseUrl: 'https://{yourOktaDomain}.com',
+      baseUrl: 'https://{yourOktaDomain}',
       clientId: '{clientId}',
       authParams: {
         issuer: 'default',
@@ -550,8 +550,8 @@ import { OktaService } from './shared/okta/okta.service';
 export class AppModule { }
 ```
 
-Modify `client/src/app/shared/beer/beer.service.ts` to read the access token and set it in an `Authorization` header when 
-it exists. 
+Modify `client/src/app/shared/beer/beer.service.ts` to read the access token and set it in an `Authorization` header when
+it exists.
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -577,7 +577,7 @@ export class BeerService {
 }
 ```
 
-Modify `app.component.html` to add a placeholder for the widget and a section to show the user’s name and a logout button.
+Modify `app.component.html` to add a placeholder for the widget and a section to show the user's name and a logout button.
 
 
 ```html
@@ -600,7 +600,7 @@ Modify `app.component.html` to add a placeholder for the widget and a section to
 ```
 
 
-You’ll notice the `user` variable in the HTML. To resolve this, you need to change your `src/app/app.component.ts` so it renders the Sign-In Widget. Angular's `ChangeDetectorRef` is used to notify Angular when things have changed and rendering needs to process changed variables.
+You'll notice the `user` variable in the HTML. To resolve this, you need to change your `src/app/app.component.ts` so it renders the Sign-In Widget. Angular's `ChangeDetectorRef` is used to notify Angular when things have changed and rendering needs to process changed variables.
 
 ```typescript
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -705,7 +705,7 @@ export class BeerListComponent implements OnInit {
 
 ### Verify Authentication Works
 
-Start the client with `npm start`, navigate to `http://localhost:4200`, and you should see a login form like the following. 
+Start the client with `npm start`, navigate to `http://localhost:4200`, and you should see a login form like the following.
 
 <img src="/img/blog/microservices-spring-secure/angular-login.png" alt="Angular Login" width="800" class="center-image">
 
@@ -727,7 +727,7 @@ You should be able to log in, see a welcome message, as well as a logout button.
 
 ## Learn More
 
-This article showed you how to use Spring Security, Okta, and a few Java libraries to secure a microservices architecture. With JWTs, Zuul, Spring Security, and Juiser, you can ensure your backend services communicate securely. 
+This article showed you how to use Spring Security, Okta, and a few Java libraries to secure a microservices architecture. With JWTs, Zuul, Spring Security, and Juiser, you can ensure your backend services communicate securely.
 
 The source code for this tutorial is [available on GitHub](https://github.com/oktadeveloper/spring-boot-microservices-example/), in the ["okta" branch](https://github.com/oktadeveloper/spring-boot-microservices-example/tree/okta).
 
@@ -736,7 +736,7 @@ git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
 git checkout okta
 ```
 
-Learn more about Okta and its APIs at [developer.okta.com](http://developer.okta.com). If you have questions about this tutorial, please hit me up on Twitter [@mraible](https://twitter.com/mraible) or post a question to [Stack Overflow with an “okta” tag](https://stackoverflow.com/questions/tagged/okta).
+Learn more about Okta and its APIs at [developer.okta.com](http://developer.okta.com). If you have questions about this tutorial, please hit me up on Twitter [@mraible](https://twitter.com/mraible) or post a question to [Stack Overflow with an "okta" tag](https://stackoverflow.com/questions/tagged/okta).
 
 **Update:** To learn how to lock down this application with Spring Security and OAuth, see [Secure a Spring Microservices Architecture with Spring Security and OAuth 2.0](/blog/2018/02/13/secure-spring-microservices-with-oauth).
 

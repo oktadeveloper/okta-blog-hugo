@@ -5,7 +5,7 @@ author: mraible
 date: 2017-12-04T00:00:00Z
 description: "Angular and Spring Boot are arguably the two most popular frameworks in all of web development. Matt Raible shows you how to use them together in the same app, and how to secure it all with Okta."
 tags: [authentication, spring boot, spring boot 2.0, angular, angular 5, okta, oidc]
-tweets: 
+tweets:
   - "Angular + Spring Boot makes for a nice development experience. Learn how to make them work together with OIDC authentication →"
   - "Spring Boot with @java + Angular with @typescriptlang = ❤️. Learn how to build a @springboot + @angular CRUD app today!"
 ---
@@ -156,7 +156,7 @@ If you restart your server app and hit `localhost:8080/cool-cars` with your brow
 
 ```bash
 http localhost:8080/cool-cars
-HTTP/1.1 200 
+HTTP/1.1 200
 Content-Type: application/json;charset=UTF-8
 Date: Mon, 05 Mar 2018 12:31:32 GMT
 Transfer-Encoding: chunked
@@ -250,6 +250,8 @@ export class CarService {
   }
 }
 ```
+
+> **TIP:** If you're using using Angular 6+, you can make this code work by installing [rxjs-compat](https://www.npmjs.com/package/rxjs-compat) with `npm i rxjs-compat`.
 
 Add this service as a provider in `src/app/app.module.ts`. While you're in there, import `HttpClientModule` too.
 
@@ -492,7 +494,7 @@ Now your browser should show you the list of car names, along with an avatar ima
 
 ## Add an Edit Feature
 
-Having a list of car names and images is cool, but it's a lot more fun when you can interact with it! To add an edit feature, start by generating a `car-edit` component. 
+Having a list of car names and images is cool, but it's a lot more fun when you can interact with it! To add an edit feature, start by generating a `car-edit` component.
 
 ```bash
 ng g c car-edit
@@ -702,7 +704,7 @@ Put a little padding around the image by adding the following CSS to `client/src
 }
 ```
 
-Modify `client/src/app/app.component.html` and replace `<app-car-list></app-car-list>` with `<router-outlet></router-outlet>`. This change is necessary or routing between components won’t work.
+Modify `client/src/app/app.component.html` and replace `<app-car-list></app-car-list>` with `<router-outlet></router-outlet>`. This change is necessary or routing between components won't work.
 
 
 ```html
@@ -746,7 +748,7 @@ Now you need to configure the server to use Okta for authentication. You'll need
 
 ### Create an OIDC App in Okta
 
-Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don’t have an account) and navigate to **Applications** > **Add Application**. Click **Single-Page App**, click **Next**, and give the app a name you’ll remember. Change all instances of `localhost:8080` to `localhost:4200` and click **Done**.
+Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don't have an account) and navigate to **Applications** > **Add Application**. Click **Single-Page App**, click **Next**, and give the app a name you'll remember. Change all instances of `localhost:8080` to `localhost:4200` and click **Done**.
 
 Create `server/src/main/resources/application.yml` and copy the client ID into it. While you're in there, fill in the rest of the necessary values to match your Okta domain.
 
@@ -754,13 +756,13 @@ Create `server/src/main/resources/application.yml` and copy the client ID into i
 security:
     oauth2:
         client:
-            access-token-uri: https://{yourOktaDomain}.com/oauth2/default/v1/token
-            user-authorization-uri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
+            access-token-uri: https://{yourOktaDomain}/oauth2/default/v1/token
+            user-authorization-uri: https://{yourOktaDomain}/oauth2/default/v1/authorize
             client-id: {clientId}
             scope: openid profile email
         resource:
-            user-info-uri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-            token-info-uri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
+            user-info-uri: https://{yourOktaDomain}/oauth2/default/v1/userinfo
+            token-info-uri: https://{yourOktaDomain}/oauth2/default/v1/introspect
             prefer-token-info: false
 ```
 
@@ -795,7 +797,7 @@ In `client/src/app/app.module.ts`, add a `config` variable with the settings for
 
 ```typescript
 const config = {
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   redirectUri: 'http://localhost:4200/implicit/callback',
   clientId: '{clientId}'
 };
@@ -851,7 +853,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private async handleAccess(request: HttpRequest<any>, next: HttpHandler): Promise<HttpEvent<any>> {
-    // Only add to known domains since we don't want to send our tokens to just anyone. 
+    // Only add to known domains since we don't want to send our tokens to just anyone.
     // Also, Giphy's API fails when the request includes a token.
     if (request.urlWithParams.indexOf('localhost') > -1) {
       const accessToken = await this.oktaAuth.getAccessToken();
@@ -1065,6 +1067,7 @@ This article uses Okta's Angular SDK, which is something we haven't written abou
 
 I've written a number of Spring Boot and Angular tutorials in the past, and I've recently updated them for Angular 5.
 
+* [Build a Basic CRUD App with Angular 7.0 and Spring Boot 2.1](/blog/2018/08/22/basic-crud-angular-7-and-spring-boot-2)
 * [Bootiful Development with Spring Boot and Angular](/blog/2017/04/26/bootiful-development-with-spring-boot-and-angular)
 * [Build a Secure Notes Application with Kotlin, TypeScript, and Okta](/blog/2017/09/19/build-a-secure-notes-application-with-kotlin-typescript-and-okta)
 * [Angular Authentication with OpenID Connect and Okta in 20 Minutes](/blog/2017/04/17/angular-authentication-with-oidc)

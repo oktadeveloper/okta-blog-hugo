@@ -27,7 +27,7 @@ Once you've completed this tutorial, you'll have Spring Security locking things 
 
 <img src="/img/blog/microservices-spring-oauth/spring-oauth-microservices-diagram.png" alt="Spring Microservices with OAuth" width="800" class="center-image">
 
-To begin, you’ll need to clone the aforementioned article’s completed project.
+To begin, you'll need to clone the aforementioned article's completed project.
 
 ```
 git clone https://github.com/oktadeveloper/spring-boot-microservices-example.git
@@ -84,13 +84,13 @@ public class EdgeServiceApplication {
 Adding `@EnableOAuth2Sso` causes Spring Security to look for a number of properties. Add the following properties to `edge-service/src/main/resources/application.properties`.
 
 ```properties
-security.oauth2.client.client-id={yourClientId}
-security.oauth2.client.client-secret={yourClientSecret}
-security.oauth2.client.access-token-uri=https://{yourOktaDomain}.com/oauth2/default/v1/token
-security.oauth2.client.user-authorization-uri=https://{yourOktaDomain}.com/oauth2/default/v1/authorize
+security.oauth2.client.client-id={clientId}
+security.oauth2.client.client-secret={clientSecret}
+security.oauth2.client.access-token-uri=https://{yourOktaDomain}/oauth2/default/v1/token
+security.oauth2.client.user-authorization-uri=https://{yourOktaDomain}/oauth2/default/v1/authorize
 security.oauth2.client.scope=openid profile email
-security.oauth2.resource.user-info-uri=https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-security.oauth2.resource.token-info-uri=https://{yourOktaDomain}.com/oauth2/default/v1/introspect
+security.oauth2.resource.user-info-uri=https://{yourOktaDomain}/oauth2/default/v1/userinfo
+security.oauth2.resource.token-info-uri=https://{yourOktaDomain}/oauth2/default/v1/introspect
 security.oauth2.resource.prefer-token-info=false
 ```
 
@@ -146,13 +146,13 @@ In `beer-catalog-service/pom.xml`, add the same dependencies you added to the Ed
 Add the same properties to `beer-catalog-service/src/main/resources/application.properties`.
 
 ```properties
-security.oauth2.client.client-id={yourClientId}
-security.oauth2.client.client-secret={yourClientSecret}
-security.oauth2.client.access-token-uri=https://{yourOktaDomain}.com/oauth2/default/v1/token
-security.oauth2.client.user-authorization-uri=https://{yourOktaDomain}.com/oauth2/default/v1/authorize
+security.oauth2.client.client-id={clientId}
+security.oauth2.client.client-secret={clientSecret}
+security.oauth2.client.access-token-uri=https://{yourOktaDomain}/oauth2/default/v1/token
+security.oauth2.client.user-authorization-uri=https://{yourOktaDomain}/oauth2/default/v1/authorize
 security.oauth2.client.scope=openid profile email
-security.oauth2.resource.user-info-uri=https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-security.oauth2.resource.token-info-uri=https://{yourOktaDomain}.com/oauth2/default/v1/introspect
+security.oauth2.resource.user-info-uri=https://{yourOktaDomain}/oauth2/default/v1/userinfo
+security.oauth2.resource.token-info-uri=https://{yourOktaDomain}/oauth2/default/v1/introspect
 security.oauth2.resource.prefer-token-info=false
 ```
 
@@ -466,8 +466,8 @@ export class OktaService {
 
   constructor() {
     this.widget = new OktaSignIn({
-      baseUrl: 'https://{yourOktaDomain}.com',
-      clientId: '{yourClientId}',
+      baseUrl: 'https://{yourOktaDomain}',
+      clientId: '{clientId}',
       authParams: {
         issuer: 'default',
         responseType: ['id_token', 'token'],
@@ -552,7 +552,7 @@ Modify `app.component.html` to add a placeholder for the widget and a section to
 ```
 
 
-You’ll notice the `user` variable in the HTML. To resolve this, you need to change your `client/src/app/app.component.ts` so it renders the Sign-In Widget. Angular's `ChangeDetectorRef` is used to notify Angular when things have changed and rendering needs to process updated variables.
+You'll notice the `user` variable in the HTML. To resolve this, you need to change your `client/src/app/app.component.ts` so it renders the Sign-In Widget. Angular's `ChangeDetectorRef` is used to notify Angular when things have changed and rendering needs to process updated variables.
 
 ```typescript
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';

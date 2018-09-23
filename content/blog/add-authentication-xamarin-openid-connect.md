@@ -46,9 +46,9 @@ Ready to get started? [Register for a free developer account!](https://developer
 Once you're in your account, create a new native app in the Applications tab. From there you need to collect these values which you'll need when implementing authentication in your mobile app:
 
 -  **Client ID:** get this from the "General" tab of the app you've made.
--  **Redirect URI:** you can also get this from the "General" tab of the app you've made. Example: `com.oktapreview.dev-224943:/callback`
--  **Redirect Scheme**: this is the **Redirect URI** without the ":/callback" suffix. Example: `com.oktapreview.dev-224943`
--  The **Org URL** value from the Okta Dashboard page. Example: `https://dev-224943.oktapreview.com`
+-  **Redirect URI:** you can also get this from the "General" tab of the app you've made. Example: `{yourOktaScheme}:/callback`
+-  **Redirect Scheme**: this is the **Redirect URI** without the ":/callback" suffix. Example: `{yourOktaScheme}`
+-  The **Org URL** value from the Okta Dashboard page. Example: `https://{yourOktaDomain}`
 
 <img src="/img/blog/xamarin-oidc/okta-dashboard.png" alt="Okta Dashboard" width="800" class="center-image">
 
@@ -142,7 +142,7 @@ public class Constants
 
     public const string ClientId = "{clientId}";
     public const string RedirectUri = "{redirectUri}";
-    public const string OrgUrl = "https://{yourOktaDomain}.com";
+    public const string OrgUrl = "https://{yourOktaDomain}";
     public const string AuthorizationServerId = "default";
 
     public static readonly string DiscoveryEndpoint =
@@ -457,7 +457,7 @@ On iOS, you'll start by modifying the `AppDelegate` class. You need to add a pro
 
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-        // … (existing code
+        // ... (existing code
 
         public override bool OpenUrl(
             UIApplication application, NSUrl url,

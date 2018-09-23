@@ -548,7 +548,7 @@ Vue.use(Router)
 // Add the $auth plugin from the Okta Vue SDK to the Vue instance
 Vue.use(Auth, {
   // Replace this with your Okta domain:
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
   // Replace this with the client ID of the Okta app you just created:
   client_id: '{clientId}',
   redirect_uri: 'http://localhost:5000/implicit/callback',
@@ -571,9 +571,7 @@ router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
 export default router
 ```
 
-Replace `{yourOktaDomain}` with your Okta Org URL, which usually looks like this: `https://dev-12345.oktapreview.com`. You can find it in the top right corner of the Okta developer dashboard page.
-
-Next, paste the Client ID you copied from the application you created a minute ago into the `client_id` property.
+Replace `{yourOktaDomain}` with your Okta org URL, which you can find on the Dashboard page in the Developer Console. Next, paste the Client ID you copied from the application you created a minute ago into the `client_id` property.
 
 Try it out: run the server with `dotnet run` and try logging in with the email and password you used to sign up for Okta:
 
@@ -805,7 +803,7 @@ When the Okta Vue SDK handles a login via Okta, it saves a token called an **acc
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
-    options.Authority = "https://{yourOktaDomain}.com/oauth2/default";
+    options.Authority = "https://{yourOktaDomain}/oauth2/default";
     options.Audience = "api://default";
 });
 ```
@@ -891,7 +889,7 @@ Open the `Startup.cs` file again and add this code anywhere in the `ConfigureSer
 ```csharp
 services.AddSingleton<IOktaClient>(new OktaClient(new OktaClientConfiguration
 {
-    OrgUrl = "https://{yourOktaDomain}.com",
+    OrgUrl = "https://{yourOktaDomain}",
     Token = Configuration["okta:token"]
 }));
 ```
