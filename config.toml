@@ -1,6 +1,7 @@
 name = "The Identity Platform for Developers"
 email = "developers@okta.com"
 baseURL = "https://developer.okta.com"
+googleAnalytics = "UA-15777010-3"
 languageCode = "en-us"
 title = "Okta Developer"
 theme = "okta"
@@ -29,8 +30,6 @@ paginatePath = "page"
   api_references = [ "/docs/api/resources/authorization-servers", "/docs/api/resources/apps", "/docs/api/resources/events", "/docs/api/resources/oauth-clients", "/docs/api/resources/factor_admin","/docs/api/resources/factors", "/docs/api/resources/groups","/docs/api/resources/idps","/docs/api/resources/policy","/docs/api/resources/roles","/docs/api/resources/schemas","/docs/api/resources/system_log","/docs/api/resources/templates","/docs/api/resources/tokens","/docs/api/resources/trusted-origins","/docs/api/resources/users","/docs/api/resources/zones"]
   reference = [ "/reference/api_reference/", "/reference/getting_started/", "/reference/authentication_reference/"]
   how_to = [ "/how-to/byo_saml/", "/how-to/creating-token-with-groups-claim/", "/how-to/sharing-cert/", "/how-to/updating_saml_cert/"]
-
-googleAnalytics = "UA-15777010-3"
 
 [outputFormats]
 [outputFormats.RSS]
