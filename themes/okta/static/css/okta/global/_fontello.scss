@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'okta';
-  src: url('./fonts/okta.eot?37443478');
-  src: url('./fonts/okta.eot?37443478#iefix') format('embedded-opentype'),
-  url('./fonts/okta.woff?37443478') format('woff'),
-  url('./fonts/okta.ttf?37443478') format('truetype'),
-  url('./fonts/okta.svg?37443478#okta') format('svg');
+  src: url('#{$asset-path}/fonts/okta.eot?37443478');
+  src: url('#{$asset-path}/fonts/okta.eot?37443478#iefix') format('embedded-opentype'),
+  url('#{$asset-path}/fonts/okta.woff?37443478') format('woff'),
+  url('#{$asset-path}/fonts/okta.ttf?37443478') format('truetype'),
+  url('#{$asset-path}/fonts/okta.svg?37443478#okta') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'okta';
-    src: url('./fonts/okta.svg?37443478#okta') format('svg');
+    src: url('#{$asset-path}/font/okta.svg?37443478#okta') format('svg');
   }
 }
 */
