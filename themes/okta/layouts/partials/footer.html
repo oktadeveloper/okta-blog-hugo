@@ -2,7 +2,7 @@
   <div class="Wrap">
     <div class="Row">
       <div class="Column--3 Column--medium-6 Column--xSmall-12">
-        <a class="Logo" href="https://www.okta.com/" target="_blank" rel="noopener noreferrer"><img src="https://developer.okta.com/sites/all/themes/developer/images/logo-footer.png" alt="Okta">Visit okta.com</a>
+        <a href="https://www.okta.com/" target="_blank" rel="noopener noreferrer"><div class="Logo"><img src="{{ .Site.Params.external_url }}/sites/all/themes/developer/images/logo-footer.png" alt="Okta"></div><p>Visit okta.com</p></a>
       </div>
       <div class="Column--3 Column--medium-12 Column--xSmall-12">
         <h4>Social</h4>
@@ -19,22 +19,25 @@
           <li>
             <a class="Footer-links--rss" target="_blank" rel="noopener noreferrer" href="http://feeds.feedburner.com/OktaBlog">RSS Blog</a>
           </li>
+          <li>
+            <a class="Footer-links--youtube" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/channel/UC5AMiWqFVFxF1q9Ya1FuZ_Q/featured">YouTube</a>
+          </li>
         </ul>
       </div>
       <div class="Column--3 Column--medium-6 Column--small-12">
         <h4>More Info</h4>
         <ul class="Footer-links">
           <li>
-            <a target="_blank" href="{{ .Site.BaseURL }}/integrate-with-okta/">Integrate with Okta</a>
+            <a target="_blank" href="{{ .Site.Params.external_url }}/integrate-with-okta/">Integrate with Okta</a>
           </li>
           <li>
             <a href="/blog/">Blog</a>
           </li>
           <li>
-            <a href="/docs/change-log/">Change Log</a>
+            <a href="{{ .Site.Params.external_url }}/docs/change-log/">Change Log</a>
           </li>
           <li>
-            <a href="/3rd_party_notices/">3rd Party Notices</a>
+            <a href="{{ .Site.Params.external_url }}/3rd_party_notices/">3rd Party Notices</a>
           </li>
         </ul>
       </div>
@@ -42,16 +45,19 @@
         <h4>Contact &amp; Legal</h4>
         <ul class="Footer-links">
           <li>
-            <a href="https://developer.okta.com/contact/">Contact Sales</a>
+            <a href="{{ .Site.Params.external_url }}/contact/">Contact our Team</a>
+          </li>
+          <li>
+            <a href="{{ .Site.Params.external_url }}/contact-sales-enterprise/">Contact Sales</a>
           </li>
           <li>
             <a target="_blank" rel="noopener noreferrer" href="mailto:developers@okta.com">Contact Support</a>
           </li>
           <li>
-            <a href="https://developer.okta.com/terms/">Terms &amp; Conditions</a>
+            <a href="{{ .Site.Params.external_url }}/terms/">Terms &amp; Conditions</a>
           </li>
           <li>
-            <a href="https://developer.okta.com/privacy/">Privacy Policy</a>
+            <a href="{{ .Site.Params.external_url }}/privacy/">Privacy Policy</a>
           </li>
         </ul>
       </div>
@@ -59,13 +65,10 @@
   </div>
 </footer>
 
-<script src="/js/dist/master.js"></script>
-<script src="/js/dist/myOkta.js"></script>
+<script src="/js/master.js"></script>
+<script src="/js/myOkta.js"></script>
+<script src="/js/blog.js"></script>
 
-{{ if eq .Params.layout "docs_page"  }}
-  <script src="/js/docs.js"></script>
-{{ end }}
-
-{{ if isset .Page.Params "js" }}
-  <script type="text/javascript" src="/js/{{ .Params.js }}"></script>
+{{ if isset .Params "js" }}
+  <script src="/js/{{ .Params.js }}"></script>
 {{ end }}
