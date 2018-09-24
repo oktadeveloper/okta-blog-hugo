@@ -1,19 +1,37 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en" dir="ltr">
-  {{ partial "head.html" . }}
-<body>
-  <div>
-    <!-- START Header -->
-    {{ partial "header.html" . }}
-    <!-- END Header -->
+<!doctype html>
+{{ "<!--[if lt IE 7 ]>" | safeHTML }}
+  <html class="ie6 no-flexbox">
+{{ "<![endif]-->" | safeHTML }}
+
+{{ "<!--[if IE 7 ]>" | safeHTML }}
+  <html class="ie7 no-flexbox">
+{{ "<![endif]-->" | safeHTML }}
+
+{{ "<!--[if IE 8 ]>" | safeHTML }}
+  <html class="ie8 no-flexbox">
+{{ "<![endif]-->" | safeHTML }}
+
+{{ "<!--[if IE 9 ]>" | safeHTML }}
+  <html class="ie9 no-flexbox">
+{{ "<![endif]-->" | safeHTML }}
+
+{{ "<!--[if IE 10 ]>" | safeHTML }}
+  <html class="ie10 no-flexbox">
+{{ "<![endif]-->" | safeHTML }}
+
+{{ "<!--[if (gt IE 10)|!(IE)]><!-->" | safeHTML }}
+  <html class="modern wf-loading" lang="en">
+{{ "<!--<![endif]-->" | safeHTML }}
+
+{{ partial "head.html" . }}
+
+<body id="blog">
+  {{ partial "header.html" . }}
+  <div class="page-content">
     {{ block "main" . }}
     {{ end }}
-    <!-- START Footer -->
-    {{ partial "footer.html" . }}
-    <!-- END Footer -->
   </div>
-  <!-- START Post Footer -->
+  {{ partial "footer.html" . }}
   {{ partialCached "post-footer.html" . }}
-  <!-- END Post Footer -->
 </body>
 </html>
