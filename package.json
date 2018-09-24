@@ -2,6 +2,9 @@
   "name": "@okta/okta.github.io",
   "version": "0.0.5",
   "description": "NPM dependencies for testing and building developer.okta.com",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "files": [
     "dist"
   ],
