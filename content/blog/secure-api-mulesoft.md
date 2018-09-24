@@ -356,7 +356,8 @@ As always, you can follow us on Twitter [@oktadev](https://twitter.com/oktadev) 
 <div style="text-align: center">
 . . .
 </div>
-<a name="step-by-step"></a>
+<div><a name="step-by-step"></a></div>
+
 Instructions for those not using the bootstrap tool:
 
 These instructions assume that you are using the Developer Edition of Okta. If you are using the Enterprise version, some of the screen captures and menus may look a little different.
@@ -364,77 +365,74 @@ These instructions assume that you are using the Developer Edition of Okta. If y
 Also, we're going to use the default authorization server that is built in to the developer edition. If you are using an Enterprise edition of Okta, you will need to set up an authorization server.
 
 <div id="step-by-step-list" markdown="1">
+<div></div>
+
 1. Set up an introspection client: Mulesoft uses a dedicated client to introspect all tokens.
 
-    Click "Applications" and then "Add application".
+   * Click "Applications" and then "Add application".
+   * Choose "Service", then Next.
+   * Name: Token Introspection Client
+   * Click Done.
 
-    Choose "Service", then Next.
-
-    Name: Token Introspection Client
-
-    Click Done.
-
-    You'll get a client id and client secret. Set these aside for Token Introspection.
+     You'll get a client id and client secret. Set these aside for Token Introspection.
 
 2. Get your OpenID Connect Authorization URLs
 
-   Click API->Authorization Servers
-
-   Click default
-
-   Click on the Metadata URI
-
-   Leave this page open
+   * Click API->Authorization Servers
+   * Click default
+   * Click on the Metadata URI
+   * Leave this page open
 
 3. Follow the steps outlined in "Mulesoft tenant: set up Okta as an External Identity Provider"
 
-    Client Registration URL = Metadata->registration_endpoint<br/>
-    Authorization Header = SSWS OKTA_API_TOKEN<br/>
-    Client ID = token introspection client<br/>
-    Client Secret = token introspection secret<br/>
-    Authorize URL = Metadata->authorization_endpoint<br/>
-    Token URL = Metadata->token_endpoint<br/>
-    Token Inspection URL = Metadata->introspection_endpoint
+   * Client Registration URL = Metadata->registration_endpoint
+   * Authorization Header = SSWS OKTA_API_TOKEN
+   * Client ID = token introspection client
+   * Client Secret = token introspection secret
+   * Authorize URL = Metadata->authorization_endpoint
+   * Token URL = Metadata->token_endpoint
+   * Token Inspection URL = Metadata->introspection_endpoint
 
 4. Finish the Mulesoft set-up:
-    Mulesoft tenant: set up and deploy your API
-    Mulesoft tenant: set access policies on your API
-    Mulesoft tenant: set up an authentication client
 
-    At the end of the "set up an authentication client" step, you'll have a client_id and client_secret to use as your authentication client id and secret.
+   * Mulesoft tenant: set up and deploy your API
+   * Mulesoft tenant: set access policies on your API
+   * Mulesoft tenant: set up an authentication client
+
+     At the end of the "set up an authentication client" step, you'll have a client_id and client_secret to use as your authentication client id and secret.
 
 5. Setting up your Okta tenant
 
-    * Set up a group: Users->Groups->Add Group
-      * Name the group "silver subscribers"; you can use the same for the description
-      * Click Add Group
-    * Add a user: Users->People->Add Person
-      * In the Groups field, add "silver subscribers"
-      * Use whatever values you wish for the remaining fields
-      * Click Save
-    * Add a scope: API->Authorization Servers->default
-      * Click the Scopes tab
-      * Click Add Scope
-        * Name: http://myapp.com/scp/silver
-        * Description: Silver scope
-        * Click Create
-    * Add a policy
-      * Click the Access Policies tab
-      * Click Add New Access Policy
-        * Name: Solar system API access
-        * Description: Solar system API access
-        * It's OK to leave it assigned to All clients
-        * Click Create
-    * Add a rule
-      * Click the Add rule button
-        * Rule Name: silver access to planets
-        * Change the User clause to "Assigned the app and a member of the following:"
-          * Add the silver subscribers group
-        * Change the Scopes clause to "The following scopes:"
-          * Add these scopes:
-            * http://myapp.com/scp/silver
-            * openid
-        * Click "Create Rule"
+   * Set up a group: Users->Groups->Add Group
+     * Name the group "silver subscribers"; you can use the same for the description
+     * Click Add Group
+   * Add a user: Users->People->Add Person
+     * In the Groups field, add "silver subscribers"
+     * Use whatever values you wish for the remaining fields
+     * Click Save
+   * Add a scope: API->Authorization Servers->default
+     * Click the Scopes tab
+     * Click Add Scope
+       * Name: http://myapp.com/scp/silver
+       * Description: Silver scope
+       * Click Create
+   * Add a policy
+     * Click the Access Policies tab
+     * Click Add New Access Policy
+       * Name: Solar system API access
+       * Description: Solar system API access
+       * It's OK to leave it assigned to All clients
+       * Click Create
+   * Add a rule
+     * Click the Add rule button
+       * Rule Name: silver access to planets
+       * Change the User clause to "Assigned the app and a member of the following:"
+         * Add the silver subscribers group
+       * Change the Scopes clause to "The following scopes:"
+         * Add these scopes:
+           * http://myapp.com/scp/silver
+           * openid
+       * Click "Create Rule"
 
     <img src="/img/blog/secure-api-mulesoft/okta_add_rule.png" alt="Okta Add Rule" width="700" class="center-image">
 
@@ -443,8 +441,11 @@ Also, we're going to use the default authorization server that is built in to th
     The API Center application renders two user authentication/authorization flows: one for a "silver" user (which you've just set up) and one for a "gold" user. If you would like to see the flow for a "gold" user (access to /moons) then go through the steps above (starting with the creation of another new group) using "gold" as the keyword in the place of "silver".
 
 6. Follow the steps above to add your REDIRECT_URI as a Trusted Origin in your Okta tenant
+
 7. Follow the steps above to assign the authentication client (created via Mulesoft UI) to Everyone.
+
 8. Copy the file `/config/templates/app_settings_template.json` to `/config/instances/app_settings.json`. Update the values in `app_settings.json` and save.
+
 9. Launch the web app!
 </div>
 
