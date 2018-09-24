@@ -44,7 +44,7 @@
   {{ end }}
 
   <title>{{ if .Page.Params.meta_title }}{{ .Page.Params.meta_title }}{{ else if .Page.Title }}{{ .Page.Title }} | {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}</title>
-  <meta name="description" content="{{ if .Page.Description }}{{ trim .Page.Description "\n" | plainify | truncate 300 }}{{ else if .Page.Params.excerpt }}{{ trim .Page.Params.excerpt "\n" | plainify | truncate 300 }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <meta name="description" content="{{ if .Page.Description }}{{ trim .Page.Description "\n" | plainify | truncate 300 | safeHTML }}{{ else if .Page.Params.excerpt }}{{ trim .Page.Params.excerpt "\n" | plainify | truncate 300 | safeHTML }}{{ else }}{{ .Site.Params.description | safeHTML }}{{ end }}">
 
   <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "/feed.xml" | absURL }}">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
@@ -59,7 +59,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="{{ .URL | absURL }}" />
     <meta property="og:title" content="{{ .Page.Title }}" />
-    <meta property="og:description" content="{{ .Page.Description | htmlUnescape }}" />
+    <meta property="og:description" content="{{ .Page.Description | safeHTML }}" />
     <meta property="og:site_name" content="{{ .Site.Title }}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@oktadev" />
