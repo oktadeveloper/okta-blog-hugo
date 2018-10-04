@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Test Your GitHub Repositories with Docker in 5 Minutes"
 author: pmcdowell
-date: 2018-09-27T01:00:00Z
+date: 2018-09-27T00:00:00Z
 description: "In this tutorial, you'll see how to test your repositories with nothing but Git, Docker, and a Makefile."
 tags: [docker, github]
 tweets:
@@ -170,7 +170,7 @@ I enjoyed documenting this technique, I hope others find it useful!
 
 ## Learn More about Go and Docker
 
-If you found this interesting, you might also enjoy another project I created using Go and GO-BINDATA-ASSETFS  [GO-BIN-DATA-ASSETFS](https://github.com/elazarl/go-bindata-assetfs) to build a Go  web server that includes HTML, images, and JavaScript in a **single self contained binary**. This source code for the example in this blog post can be found here: [Hackey-GOLANG-build](https://github.com/pmcdowell-okta/hackey-golang-build).
+If you found this interesting, you might also enjoy another project I created using Go and GO-BINDATA-ASSETFS  [GO-BIN-DATA-ASSETFS](https://github.com/elazarl/go-bindata-assetfs) to build a Go  web server that includes HTML, images, and JavaScript in a **single self contained binary**. The source code for the example in this blog post can be found here: [Hackey-GOLANG-build](https://github.com/pmcdowell-okta/hackey-golang-build).
 
 To Learn more about Docker, check out our other Docker posts:
 - [A Developer's Guide to Docker - A Gentle Introduction](/blog/2017/05/10/developers-guide-to-docker-part-1)
