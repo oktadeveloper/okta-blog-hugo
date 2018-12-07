@@ -65,7 +65,7 @@ doesn't provide data to a random client.
 In our case, the client and server are internal services communicating with each
 other. I won't cover configuring a browser client or other clients that may be
 not under your control. In this post, I'll give examples for the technology we
-use at Okta. Specifically, we use [Dropwizard](https://www.dropwizard.io/) as
+use at Okta. Specifically, we use [Dropwizard](http://www.dropwizard.io/) as
 the server framework and [Jersey](https://jersey.java.net/) for the client
 framework. We'll also use Java's
 [keytool](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html)
@@ -107,7 +107,7 @@ that chains up to the root. We'll use the global CA to issue our server its
 certificate, and since the global CA's certificate is issued by the root CA,
 we have a chain of trust. When we create the server's certificate, we'll include
 the chain as well for clients to verify. The [TLS
-standard](https://tools.ietf.org/html/rfc5246#section-7.4.2) specifies that the
+standard](http://tools.ietf.org/html/rfc5246#section-7.4.2) specifies that the
 certificate chain does not require the actual root of trust since the endpoints
 will have it already, so we'll omit it to save bandwidth. Once we have the
 certificate we'll put it in a JKS for our Dropwizard application to use. If
@@ -174,7 +174,7 @@ server:
 
 {: style="text-align: center;font-size: x-small;"}
 Dropwizard code is Copyright &copy; 2010-2013 Coda Hale, Yammer Inc., 2014-2015 Dropwizard Team and/or its affiliates.
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 That was pretty easy, huh? No cryptic OpenSSL commands! Now our server should be
 configured to refuse connections from clients not presenting a root issued
@@ -269,11 +269,11 @@ Jersey code is Copyright &copy; 2010-2015 Oracle and/or its affiliates.
 Hooray authentication!
 
 {: style="text-align: center"}
-[![xkcd-identity](https://imgs.xkcd.com/comics/identity.png)](https://xkcd.com/1121/)
+[![xkcd-identity](http://imgs.xkcd.com/comics/identity.png)](https://xkcd.com/1121/)
 
 {: style="text-align: center;font-size: x-small;"}
 Comic is Copyright &copy; [xkcd.com](https://xkcd.com).
-[CC BY-NC 2.5](https://creativecommons.org/licenses/by-nc/2.5/).
+[CC BY-NC 2.5](http://creativecommons.org/licenses/by-nc/2.5/).
 
 ## Tightening Things Up
 
@@ -309,7 +309,7 @@ The HTTPS endpoint identification algorithm will cause Java to do hostname
 verification against your cert. Specifically, this will check the hostname of
 the client that made the request against the DN that is given in the client's
 certificate. If they do not match, the connection will be refused. This is a
-great, [standard](https://tools.ietf.org/html/rfc2818#section-3.1) way to solve
+great, [standard](http://tools.ietf.org/html/rfc2818#section-3.1) way to solve
 this problem, however it can be tricky to know what the hostnames will be or to
 make a wildcard pattern (or [subject alternative name
 extension](https://tools.ietf.org/html/rfc3280#section-4.2.1.7)) for your
@@ -395,7 +395,7 @@ public class CertificateValidationFilter implements ContainerRequestFilter {
 
 {: style="text-align: center;font-size: x-small;"}
 Dropwizard code is Copyright &copy; 2010-2013 Coda Hale, Yammer Inc., 2014-2015 Dropwizard Team and/or its affiliates.
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 Jersey code is Copyright &copy; 2010-2015 Oracle and/or its affiliates.
 [GPL 2.0 Selected](https://jersey.java.net/license.html).
 
@@ -418,5 +418,5 @@ you implement these authentication concepts in your applications.
 #### References
 1. [Common keytool commands](https://www.sslshopper.com/article-most-common-java-keytool-keystore-commands.html)
 2. [Common openssl commands](https://www.sslshopper.com/article-most-common-openssl-commands.html)
-3. [Dropwizard https configuration manual](https://www.dropwizard.io/0.7.1/docs/manual/configuration.html#man-configuration-https)
+3. [Dropwizard https configuration manual](http://www.dropwizard.io/0.7.1/docs/manual/configuration.html#man-configuration-https)
 4. [Jersey client documentation](https://jersey.java.net/documentation/latest/client.html#d0e5128)

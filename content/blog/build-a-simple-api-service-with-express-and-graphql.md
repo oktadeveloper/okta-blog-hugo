@@ -18,6 +18,8 @@ In this tutorial, I'll show you how to write a custom GraphQL API using Node and
 
 ## Create the GraphQL API with Express
 
+If you're in a hurry and would rather cut to the chase, you can find the final sample code [on GitHub](https://github.com/oktadeveloper/okta-express-graphql-example). However, if you want to follow along to get more detail and see how the code was put together, keep reading.
+
 To create the API, start by creating a new folder and creating a `package.json` file to manage your dependencies. You'll also need to install a few dependencies to get GraphQL with Express up and running:
 
 ```bash
@@ -192,9 +194,39 @@ initializeData()
 
 Now that you have your queries all set up and some data stubbed in, go back to GraphQL Playground and play around a bit. Try getting all the posts, or get all the authors and posts associated with each one.
 
+```graphql
+query {
+  posts {
+    id
+    author {
+      id
+      firstName
+      lastName
+    }
+    body
+  }
+}
+```
+
 <img src="/img/blog/graphql-express/query-all-posts.png" alt="query all posts" width="600" class="center-image">
 
 Or get weird and get a single post by id, then the author for that post, and all of that author's posts (including the one you just queried).
+
+```graphql
+query {
+  post(id: 2) {
+    id
+    author {
+      firstName
+      posts {
+        id
+        body
+      }
+    }
+    body
+  }
+}
+```
 
 <img src="/img/blog/graphql-express/get-weird.png" alt="get weird" width="600" class="center-image">
 
@@ -209,10 +241,11 @@ HOST_URL=http://localhost:4000
 OKTA_ORG_URL=https://{yourOktaOrgUrl}
 ```
 
-You will also need a random string to use as an App Secret for sessions. You can generate this with the following command:
+You will also need a random string to use as an App Secret for sessions. You can generate this with the following commands:
 
 ```bash
-echo "APP_SECRET=`openssl rand -base64 32`" >> .env
+npm install -g uuid-cli
+echo "APP_SECRET=`uuid`" >> .env
 ```
 
 Next, log in to your developer console, navigate to **Applications**, then click **Add Application**. Select **Web**, then click **Next**.
@@ -297,7 +330,7 @@ okta.initializeApp(app)
 To make this all work, you'll also need to install a few new dependencies:
 
 ```bash
-npm i @okta/jwt-verifier@0.0.12 @okta/oidc-middleware@1.0.0 @okta/oidc-sdk-nodejs@1.2.0 dotenv@6.0.0 express-session@1.15.6
+npm i @okta/jwt-verifier@0.0.12 @okta/oidc-middleware@1.0.0 @okta/okta-sdk-nodejs@1.2.0 dotenv@6.0.0 express-session@1.15.6
 ```
 
 You should now be able to go to `http://localhost:4000/access-token` to log in and get an access token. If you were just at your developer console, you'll probably find you're already logged in. You can log out of your developer console to ensure the flow works properly.
@@ -403,11 +436,31 @@ You can also get rid of the `initializeData` function now that you have the abil
 
 Try to make a call to the new mutation and create a post. Since you're not authenticated, you should get `null` in response.
 
+```graphql
+mutation {
+  submitPost(input: {
+    body: "Hello, world!"
+  }) {
+    id
+    body
+    author {
+      id
+      firstName
+      lastName
+      posts {
+        id
+        body
+      }
+    }
+  }
+}
+```
+
 <img src="/img/blog/graphql-express/cannot-create-post.png" alt="cannot create post" width="600" class="center-image">
 
 Typically an app of some sort, whether a web app or a native app, will handle the UI for authentication and then seamlessly pass along the `Authorization` header to the API. In this case, since we're just focusing on the API, I had you implement an endpoint for grabbing the auth token manually.
 
-Head to [http://localhost:4000/access-token](http://localhost:4000/access-token) to sign in with Okta and get an access token. Copy the access token, then head back to the GraphQL Playground. At the bottom of the page, there's a link that says `HTTP HEADERS`. When you click that, a section will open up that allows you to add some headers as JSON. Add the following, making sure to add `Bearer` to the front of the token, so it should look something like `Bearer eyJraWQ...xHUOjj_A` (although the real token will be much longer):
+Head to `http://localhost:4000/access-token` to sign in with Okta and get an access token. Copy the access token, then head back to the GraphQL Playground. At the bottom of the page, there's a link that says `HTTP HEADERS`. When you click that, a section will open up that allows you to add some headers as JSON. Add the following, making sure to add `Bearer` to the front of the token, so it should look something like `Bearer eyJraWQ...xHUOjj_A` (although the real token will be much longer):
 
 ```json
 {
@@ -415,7 +468,7 @@ Head to [http://localhost:4000/access-token](http://localhost:4000/access-token)
 }
 ```
 
-You should now be authenticated, and the same post will return a valid post:
+You should now be authenticated, and the same mutation will return a valid post:
 
 <img src="/img/blog/graphql-express/can-create-post.png" alt="authenticated - can create post" width="600" class="center-image">
 
@@ -427,7 +480,7 @@ If you want to mess around with other users, you can add people from the develop
 
 Try playing around with the API a bit and see what fun stuff you can do with it. I think you'll quickly see what can make GraphQL so much more powerful than a traditional REST API, and how it can be fun to work with even if you're just using the Playground. See if you can come up data points to connect, or get data from external sources. Since resolvers are simply `async` functions, you could just as easily fetch data from an external API or from a database. Your imagination is the limit.
 
-If you want to see the final sample code, you can find it [on github](https://github.com/oktadeveloper/okta-express-graphql-example).
+If you want to see the final sample code, you can find it [on GitHub](https://github.com/oktadeveloper/okta-express-graphql-example).
 
 If you'd like to learn more about GraphQL or Express, check out some of these other posts on the Okta developer blog:
 

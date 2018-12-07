@@ -32,7 +32,7 @@ new feature we're working on. We collaborate closely with customers while
 building features allowing for continuous feedback as we iterate and get
 changes out in weekly sprints.
 
-![xkcd - pass the salt](https://imgs.xkcd.com/comics/the_general_problem.png)
+![xkcd - pass the salt](http://imgs.xkcd.com/comics/the_general_problem.png)
 
 ## 2. Keep it Simple
 
@@ -41,16 +41,16 @@ changes out in weekly sprints.
 
 This truism has been around for ages, and it goes hand-in-hand with the
 first principle.  If it doesn't add value to users now, [you ain't gonna
-need it - YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)!
+need it - YAGNI](http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)!
 
 We all encounter overly complex code where it's nearly impossible to reason
 about what it does. Part of this confusion is because it's
 generally [harder to read code than to write
-it](https://www.joelonsoftware.com/articles/fog0000000069.html) but beyond
+it](http://www.joelonsoftware.com/articles/fog0000000069.html) but beyond
 that, there are clearly fundamental qualities of some code making it
 more intuitive than other code. There's a lot of prior art on this topic and a
 great place to start is [Clean
-Code](https://books.google.com/books?id=dwSfGQAACAAJ) by Robert C. Martin, aka
+Code](http://books.google.com/books?id=dwSfGQAACAAJ) by Robert C. Martin, aka
 Uncle Bob. The book breaks down the qualities of code which make it
 intuitive, and provides a framework for reasoning about code quality.
 
@@ -187,4 +187,4 @@ performing code:
 ### Reference
 
 [^the-knowledge-creating-company]: Ikujiro Nonaka, and Hirotaka Takeuchi. [The Knowledge Creating Company](https://books.google.com/books/about/The_Knowledge_creating_Company.html?id=B-qxrPaU1-MC). Oxford University Press, 1995. Print.
-[^agile-cost-curve]: Scott Ambler. [Examining the Agile Cost of Change Curve](https://www.agilemodeling.com/essays/costOfChange.htm).
+[^agile-cost-curve]: Scott Ambler. [Examining the Agile Cost of Change Curve](http://www.agilemodeling.com/essays/costOfChange.htm).

@@ -2,7 +2,7 @@
 layout: blog_post
 title: "Test Your GitHub Repositories with Docker in 5 Minutes"
 author: pmcdowell
-date: 2018-09-27T08:00:00Z
+date: 2018-09-27T00:00:00Z
 description: "In this tutorial, you'll see how to test your repositories with nothing but Git, Docker, and a Makefile."
 tags: [docker, github]
 tweets:
@@ -176,4 +176,4 @@ To Learn more about Docker, check out our other Docker posts:
 - [A Developer's Guide to Docker - A Gentle Introduction](/blog/2017/05/10/developers-guide-to-docker-part-1)
 - [A Developer's Guid to Docker - The Dockerfile](/blog/2017/05/10/developers-guide-to-docker-part-2)
 
-As always, feel free to post questions in the comments below. Don't forget to follow us on [Twitter](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadeveloper), and [LinkedIn](https://www.linkedin.com/company/oktadev/)!
+As always, feel free to post questions in the comments below. Don't forget to follow us on [Twitter](https://twitter.com/oktadev), [Facebook](https://www.facebook.com/oktadevelopers), and [LinkedIn](https://www.linkedin.com/company/oktadev/)!
