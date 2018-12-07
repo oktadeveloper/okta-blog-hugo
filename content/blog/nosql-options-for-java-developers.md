@@ -40,7 +40,7 @@ I received many suggestions, listed in alphabetical order below:
 1. Redis
 1. (JetBrains) Xodus
 
-People also mentioned [Hibernate OGM](http://hibernate.org/ogm/) (JPA for NoSQL) and [NoSQLUnit](https://github.com/lordofthejars/nosql-unit/) as tools to help access and test NoSQL databases.
+People also mentioned [Hibernate OGM](https://hibernate.org/ogm/) (JPA for NoSQL) and [NoSQLUnit](https://github.com/lordofthejars/nosql-unit/) as tools to help access and test NoSQL databases.
 
 Note that I didn't receive any requests for CouchDB, HBase, Elasticsearch, or Solr. CouchDB and Couchbase are often confused because of similar names, but [they're quite different](https://www.couchbase.com/couchbase-vs-couchdb). Since CouchDB is a document store, I included it in my rankings. I also added HBase since it is mentioned by ITBusinessEdge, KDnuggets, and DB-Engines (in Research & Notes section). I didn't include Elasticsearch or Solr because I believe those aren't often used as the primary data store.
 
@@ -113,7 +113,7 @@ Will you look at that - our top five results are pretty close!
 
 Since my top five results are pretty close to what DB-Engines has, I'll use mine as the top five. Below is an overview of each one, along with information about their Spring Boot support.
 
-You might ask "Why Spring Boot?" My answer is simple: because Spring Boot adoption is high. According to [Redmonk's recent look at Java frameworks](http://redmonk.com/fryan/2017/06/22/language-framework-popularity-a-look-at-java-june-2017/), Spring Boot adoption grew 76% between September 2016 and June 2017.
+You might ask "Why Spring Boot?" My answer is simple: because Spring Boot adoption is high. According to [Redmonk's recent look at Java frameworks](https://redmonk.com/fryan/2017/06/22/language-framework-popularity-a-look-at-java-june-2017/), Spring Boot adoption grew 76% between September 2016 and June 2017.
 
 <img src="/img/blog/nosql-for-java/java-frameworks-growth.png" alt="The Spring Boot Explosion" width="800" class="center-image">
 
@@ -125,7 +125,7 @@ MongoDB was founded in 2007 by the folks behind DoubleClick, ShopWiki, and Gilt 
 
 - **Available on start.spring.io?** Yes, including embedded MongoDB for testing.
 - **Supported by Spring Data?** Yes, via [Spring Data MongoDB](https://projects.spring.io/spring-data-mongodb/).
-- **Bonus:** Supported by Hibernate OGM, NoSQLUnit, and [JHipster](http://www.jhipster.tech).
+- **Bonus:** Supported by Hibernate OGM, NoSQLUnit, and [JHipster](https://www.jhipster.tech).
 
 ### Redis
 
@@ -137,9 +137,9 @@ Redis stands for REmote Dictionary Server and was started by [Salvatore Sanfilip
 
 ### Cassandra
 
-[Cassandra](http://cassandra.apache.org/) is "a distributed storage system for managing structured data that is designed to scale to a very large size across many commodity servers, with no single point of failure" (from ["Cassandra – A structured storage system on a P2P Network"](https://www.facebook.com/notes/facebook-engineering/cassandra-a-structured-storage-system-on-a-p2p-network/24413138919) on the Facebook Engineering blog). It was initially developed at Facebook to power its Inbox Search feature. Its creators, Avinash Lakshman (one of the creators of Amazon DynamoDB) and Prashant Malik, released it as an open-source project in July 2008. In March 2009, it became an Apache Incubator project and graduated to a top-level project in February 2010.
+[Cassandra](https://cassandra.apache.org/) is "a distributed storage system for managing structured data that is designed to scale to a very large size across many commodity servers, with no single point of failure" (from ["Cassandra – A structured storage system on a P2P Network"](https://www.facebook.com/notes/facebook-engineering/cassandra-a-structured-storage-system-on-a-p2p-network/24413138919) on the Facebook Engineering blog). It was initially developed at Facebook to power its Inbox Search feature. Its creators, Avinash Lakshman (one of the creators of Amazon DynamoDB) and Prashant Malik, released it as an open-source project in July 2008. In March 2009, it became an Apache Incubator project and graduated to a top-level project in February 2010.
 
-In addition to Facebook, Cassandra helps a number of other companies achieve web scale. It has some [impressive numbers about scalability on its homepage](http://cassandra.apache.org).
+In addition to Facebook, Cassandra helps a number of other companies achieve web scale. It has some [impressive numbers about scalability on its homepage](https://cassandra.apache.org).
 
 > One of the largest production deployments is Apple's, with over 75,000 nodes storing over 10 PB of data. Other large Cassandra installations include Netflix (2,500 nodes, 420 TB, over 1 trillion requests per day), Chinese search engine Easou (270 nodes, 300 TB, over 800 million requests per day), and eBay (over 100 nodes, 250 TB).
 
@@ -170,7 +170,7 @@ I'm not sure that PostgreSQL and its JSON support should be included as a recomm
 
 ## Recommendation
 
-I feel good about how this analysis played out, and as a committer on the [JHipster](http://www.jhipster.tech) project, I'm both well aware of the strength of that team and think that its support for MongoDB and Cassandra is a pretty strong endorsement. It's interesting to see that there's [work-in-progress to add Couchbase](https://github.com/jhipster/generator-jhipster/issues/6086) too.
+I feel good about how this analysis played out, and as a committer on the [JHipster](https://www.jhipster.tech) project, I'm both well aware of the strength of that team and think that its support for MongoDB and Cassandra is a pretty strong endorsement. It's interesting to see that there's [work-in-progress to add Couchbase](https://github.com/jhipster/generator-jhipster/issues/6086) too.
 
 But I'm not stopping there. I shared this analysis with a few experts I know in the Java and NoSQL communities and asked them the following questions:
 
@@ -186,9 +186,9 @@ Please check back in a few weeks! I'll post the answers to these questions from 
 
 ## Research & Notes
 
-ITBusinessEdge has a [slideshow about the top five NoSQL databases](http://www.itbusinessedge.com/slideshows/top-five-nosql-databases-and-when-to-use-them.html). However, there's no date on the article, and it says Redis Labs made the selection. The slideshow lists MongoDB, Cassandra, Redis, Cassandra, CouchDB, and HBase. 
+ITBusinessEdge has a [slideshow about the top five NoSQL databases](https://www.itbusinessedge.com/slideshows/top-five-nosql-databases-and-when-to-use-them.html). However, there's no date on the article, and it says Redis Labs made the selection. The slideshow lists MongoDB, Cassandra, Redis, Cassandra, CouchDB, and HBase. 
 
-[Matthew Mayo](https://twitter.com/mattmayo13), editor of KDnuggets, wrote a similar article about [Top NoSQL Database Engines](http://www.kdnuggets.com/2016/06/top-nosql-database-engines.html) in June 2016. Mayo used [db-engines.com ranking](http://db-engines.com/en/ranking) and Google Trends to select the top five: MongoDB, Cassandra, Redis, HBase, and Neo4j.
+[Matthew Mayo](https://twitter.com/mattmayo13), editor of KDnuggets, wrote a similar article about [Top NoSQL Database Engines](https://www.kdnuggets.com/2016/06/top-nosql-database-engines.html) in June 2016. Mayo used [db-engines.com ranking](https://db-engines.com/en/ranking) and Google Trends to select the top five: MongoDB, Cassandra, Redis, HBase, and Neo4j.
 
 Hackernoon has an [Infographic of the most popular NoSQL databases](https://hackernoon.com/top-4-nosql-databases-infographic-b6acc389befc) that are "worth your notice." This article is from June 2017, and the comments say the rankings are based on stats from <https://db-engines.com/en/ranking_trend>. 
 

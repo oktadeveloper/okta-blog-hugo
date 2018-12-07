@@ -137,8 +137,8 @@ dependency, not a real one.
 
 ## Resources
 
--   [Dependency injection on Android: Dagger (Part 1)](http://antonioleiva.com/dependency-injection-android-dagger-part-1/)
--   [Dependency injection on Android: Dagger (Part 2)](http://antonioleiva.com/dagger-android-part-2/)
+-   [Dependency injection on Android: Dagger (Part 1)](https://antonioleiva.com/dependency-injection-android-dagger-part-1/)
+-   [Dependency injection on Android: Dagger (Part 2)](https://antonioleiva.com/dagger-android-part-2/)
 
 Stay tuned for the final part of our series, where I will show you
 how to make tests isolated. You can also check out the full code at

@@ -63,7 +63,7 @@ Another important thing to do is to use HTTP Strict Transport Security (HSTS). H
 
 There's a good chance you don't know how many direct dependencies your application uses. It's extremely likely you don't know how many transitive dependencies your application uses. This is often true, despite dependencies making up the majority of your overall application. Attackers target open source dependencies more and more, as their reuse provides many victims for a malicious hacker. It's important to ensure there are no known vulnerabilities in the entire dependency tree of your application.
 
-[Snyk](http://snyk.io) tests your application build artifacts, flagging those dependencies that have known vulnerabilities. It provides you with a list of vulnerabilities that exist in the packages you're using in your application as a dashboard.
+[Snyk](https://snyk.io) tests your application build artifacts, flagging those dependencies that have known vulnerabilities. It provides you with a list of vulnerabilities that exist in the packages you're using in your application as a dashboard.
 
 <img src="/img/blog/spring-boot-10-ways-to-secure/snyk-vulnerabilities.png" alt="Snyk Vulnerabilities Report" width="700" class="center-image">
 
@@ -77,7 +77,7 @@ You can use [Snyk for free](https://snyk.io/signup) for open source projects or 
 
 ## 3. Upgrade To Latest Releases
 
-There are various reasons to regularly upgrade the dependencies in your application. Security is one of the most important reasons that will give you the motivation to upgrade. The [start.spring.io](http://start.spring.io) starter page uses the most recent versions of Spring packages as well as dependencies, where possible.
+There are various reasons to regularly upgrade the dependencies in your application. Security is one of the most important reasons that will give you the motivation to upgrade. The [start.spring.io](https://start.spring.io) starter page uses the most recent versions of Spring packages as well as dependencies, where possible.
 
 > "I find looking for vulnerabilities in your dependencies may help motivate people to upgrade. However, there is plenty of evidence that not all CVEs are even reported. Generally, I find the ideal (perhaps not practical) solution is to be on latest and greatest." &mdash; [Rob Winch](https://twitter.com/rob_winch)
 
@@ -220,7 +220,7 @@ A good practice is to store secrets in a vault that can be used to store, provid
 
 In addition to the golden-path view where no issues exists, Vault also helps with the scenario that exists when you have been hacked. At this point it's important to revoke single or multiple secrets, perhaps by a specific user, or of a specific type. Vault offers an automated way to do this quickly when the time comes.
 
-If this interests you, be sure to invest some time looking at the [Spring Vault](http://projects.spring.io/spring-vault/) which adds an abstraction over the HashiCorp Vault, providing Spring annotation based access for clients, allowing them to access, store, and revoke secrets without getting lost in the infrastructure. The following code snippet shows how easy it is to extract a password from the Spring Vault using an annotation.
+If this interests you, be sure to invest some time looking at the [Spring Vault](https://projects.spring.io/spring-vault/) which adds an abstraction over the HashiCorp Vault, providing Spring annotation based access for clients, allowing them to access, store, and revoke secrets without getting lost in the infrastructure. The following code snippet shows how easy it is to extract a password from the Spring Vault using an annotation.
 
 ```java
 @Value("${password}")
