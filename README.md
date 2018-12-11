@@ -67,7 +67,8 @@ tweets:
 For images in your post, you should use a regular `<img>` tag and control its width with the `width` attribute. Use the `center-image` style to center the image.
 
 ```html
-<img src="/img/browser_spa_implicit_flow" alt="Browser Implicit Flow" width="600" class="center-image">
+<img src="/img/blog/wheres-the-bacon/okta-reverentgeek.jpg" 
+     alt="ReverentGeek and Okta = Two Greats that Go Great Together" width="800" class="center-image">
 ```
 
 Images for your post should go in a directory under `themes/okta/static/img/blog`. Create a new directory for your post and put your images in there. Name the directory to match your post's keywords, or simply match the URL. 
