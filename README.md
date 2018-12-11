@@ -36,9 +36,15 @@ Then you can build the site with `npm start`. Visit [`localhost:1313`](http://lo
 
 ### Create a new blog post
 
-To create a new blog post, create a new Markdown (`*.md`) or AsciiDoc (`*.adoc`) file in `content/blog`. The name of the file will be the URL, so make sure you talk to Lindsay (or your Okta contact) to confirm you have the right keywords in it.
+To create a new blog post, start by creating a new branch.
 
-The file you create should have front matter at the top that defines metadata for the post. The date it's published on is controlled by the `date` line. For example:
+```
+git checkout -b <branch name>
+```
+
+Then create a new Markdown (`*.md`) or AsciiDoc (`*.adoc`) file in `content/blog`. The name of the file will be the URL, so make sure you talk to Lindsay (or your Okta contact) to confirm you have the right keywords in it.
+
+The file you create should have [front matter](https://gohugo.io/content-management/front-matter) at the top that defines metadata for the post. The date it's published on is controlled by the `date` line. For example:
 
 ```
 ---
@@ -64,6 +70,18 @@ For images in your post, you should use a regular `<img>` tag and control its wi
 
 Images for your post should go in a directory under `themes/okta/static/img/blog`. Create a new directory for your post and put your images in there. Name the directory to match your post's keywords, or simply match the URL. 
 
-Images should be sized so they're not too big. We recommend a max image size of 1600px, so it looks good on retina displays. 
+Images should be sized so they're not too big. We recommend a max image size of 1600px, so it looks good on retina displays. They should be optimized as well. For macOS, we recommend [ImageOptim](https://imageoptim.com/mac).
 
 **NOTE:** In the future, we hope to use `<img srcset>` to create [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) for different screen sizes.
+
+Once you're satisfied with your post, push it to this repo and create a pull request.
+
+```
+git add .
+git commit -m "Add Your Awesome Post"
+git push origin <branch name>
+```
+
+Notify the team in Slack that you're ready for your PR to be reviewed.
+
+**NOTE:** Until Hugo is live PRs should not be merged. Instead, the Markdown and images should be copied to [@okta/okta.github.io](https://github.com/okta/okta.github.io). This will be handled by someone that works for Okta.
