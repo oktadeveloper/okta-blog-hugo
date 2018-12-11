@@ -1,8 +1,8 @@
-<p align="center">
-<img src="https://devforum.okta.com/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" href='https://devforum.okta.com/' width="350px"/>
-</p>
+[<img src="https://devforum.okta.com/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>][doc]
 
-# Okta developer blog [![Build Status](https://travis-ci.org/oktadeveloper/okta-blog.svg?branch=source)](https://travis-ci.org/oktadeveloper/okta-blog)
+[![Support](https://img.shields.io/badge/support-developer%20forum-blue.svg)][devforum] [![Build Status](https://travis-ci.org/oktadeveloper/okta-blog.svg?branch=source)](https://travis-ci.org/oktadeveloper/okta-blog)
+
+# Okta Developer Blog 
 
 The Okta developer blog ([developer.okta.com/blog](https://developer.okta.com/blog)) is built using [Hugo](https://gohugo.io/).
 
@@ -34,7 +34,7 @@ gem install bundler
 bundle install
 ```
 
-Then you can build the site with `npm start`. Visit [`localhost:1313`](http://localhost:1313) in your browser. 
+Then you can build the site with `npm start`. Visit <http://localhost:1313> in your browser. 
 
 ### Create a new blog post
 
