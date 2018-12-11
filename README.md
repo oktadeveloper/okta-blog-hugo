@@ -1,6 +1,6 @@
 [<img src="https://devforum.okta.com/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>][doc]
 
-[![Support](https://img.shields.io/badge/support-developer%20forum-blue.svg)][devforum] [![Build Status](https://travis-ci.org/oktadeveloper/okta-blog.svg?branch=source)](https://travis-ci.org/oktadeveloper/okta-blog)
+[![Support](https://img.shields.io/badge/support-developer%20forum-blue.svg)][devforum] [![Build Status](https://travis-ci.org/oktadeveloper/okta-blog.svg?branch=master)](https://travis-ci.org/oktadeveloper/okta-blog)
 
 # Okta Developer Blog 
 
@@ -87,3 +87,6 @@ git push origin <branch name>
 Notify the team in Slack that you're ready for your PR to be reviewed.
 
 **NOTE:** Until Hugo is live PRs should not be merged. Instead, the Markdown and images should be copied to [@okta/okta.github.io](https://github.com/okta/okta.github.io). This will be handled by someone that works for Okta.
+
+[doc]: https://developer.okta.com
+[devforum]: https://devforum.okta.com
