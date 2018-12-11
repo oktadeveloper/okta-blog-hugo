@@ -22,7 +22,9 @@ If you have questions or need help with Okta's APIs or SDKs, visit our [Develope
 
 Documentation updates, bug fixes, and PRs are all welcome!
 
-To begin, you'll need to clone this project locally and install its dependencies:
+To begin, you'll need to clone this project locally and install its dependencies.
+
+**NOTE:** If you're not a member of the `oktadeveloper` org, you'll need to fork this repo and adjust the GitHub URL accordingly.
 
 ```
 git clone git@github.com:oktadeveloper/okta-blog.git
