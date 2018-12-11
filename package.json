@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "pregenerate": "gulp",
-    "generate": "hugo server",
+    "generate": "hugo server --buildFuture",
     "build-prod": "npm run generate build -- --verbose",
     "postbuild-prod": "bash scripts/post-build-prod.sh",
     "start": "npm run generate",
@@ -53,5 +53,7 @@
     "gulp-watch": "^4.3.11",
     "gulp-clean-css": "^3.9.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "natives": "^1.1.6"
+  }
 }
