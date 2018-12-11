@@ -10,7 +10,7 @@ See a problem or want to contribute? Read [Contributing to the site](#contributi
 
 ## Getting help
 
-If you have questions or need help with Okta's APIs or SDKs, visit our [Developer Forums](https://devforum.okta.com/) or ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/okta). You can also email developers@okta.com to create a support ticket.
+If you have questions or need help with Okta's APIs or SDKs, visit our [Developer Forums](https://devforum.okta.com/) or ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/okta). If you think you've encountered a bug in one of our SDKs, please create a GitHub issue for that SDK.
 
 ### Helpful resources and links
 
