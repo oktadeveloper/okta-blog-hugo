@@ -89,7 +89,7 @@ git push origin <branch name>
 
 Notify the team in Slack that you're ready for your PR to be reviewed.
 
-**NOTE:** Until Hugo is live PRs should not be merged. Instead, the Markdown and images should be copied to [@okta/okta.github.io](https://github.com/okta/okta.github.io). This will be handled by someone that works for Okta.
+**NOTE:** Until Hugo is live, PRs should not be merged. Instead, the Markdown and images should be copied to [@okta/okta.github.io](https://github.com/okta/okta.github.io). This will be handled by someone that works for Okta.
 
 [doc]: https://developer.okta.com
 [devforum]: https://devforum.okta.com
