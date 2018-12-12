@@ -34,11 +34,13 @@ gem install bundler
 bundle install
 ```
 
+You'll also need to install Hugo. On macOS, you can use Homebrew: `brew install hugo`. See [Install Hugo](https://gohugo.io/getting-started/installing) for other operating systems.
+
 Then you can build the site with `npm start`. Visit <http://localhost:1313> in your browser. 
 
 ### Create a new blog post
 
-To create a new blog post, start by creating a new branch.
+To create a new blog post, start by creating a new branch. Your branch name should indicate your post's content (e.g., `spring-boot-rest-api-post`) or the issue number (e.g., `issue/42`) from our Kanban board.
 
 ```
 git checkout -b <branch name>
@@ -64,14 +66,14 @@ tweets:
 
 **TIP:** Make sure you add a period to the description as this will show up as a sentence when it shows up as a search result in Google.
 
-For images in your post, you should use a regular `<img>` tag and control its width with the `width` attribute. Use the `center-image` style to center the image.
+For images in your post, you should use a regular `<img>` tag and control its width with a `width` attribute. Use the `center-image` style to center the image.
 
 ```html
 <img src="/img/blog/wheres-the-bacon/okta-reverentgeek.jpg" 
      alt="ReverentGeek and Okta = Two Greats that Go Great Together" width="800" class="center-image">
 ```
 
-Images for your post should go in a directory under `themes/okta/static/img/blog`. Create a new directory for your post and put your images in there. Name the directory to match your post's keywords, or simply match the URL. 
+Images for your post should go in a directory under `themes/okta/static/img/blog`. Create a new directory for your post and put your images in there. Name the directory to match your post's keywords, or simply match the URL. Hugo's root directory is at `/themes/okta/static`, so that's why the image path above starts with `/img/blog`. 
 
 Images should be sized so they're not too big. We recommend a max image size of 1600px, so it looks good on retina displays. They should be optimized as well. For macOS, we recommend [ImageOptim](https://imageoptim.com/mac).
 
