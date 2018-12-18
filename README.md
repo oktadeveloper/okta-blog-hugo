@@ -79,7 +79,7 @@ Images should be sized so they're not too big. We recommend a max image size of 
 
 **NOTE:** In the future, we hope to use `<img srcset>` to create [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) for different screen sizes.
 
-Once you're satisfied with your post, push it to this repo and create a pull request.
+Once you're satisfied with your post, push it to this repo and create a pull request to the **Master** branch of the main repo.
 
 ```
 git add .
