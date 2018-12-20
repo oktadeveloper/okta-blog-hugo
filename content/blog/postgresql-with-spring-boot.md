@@ -27,7 +27,7 @@ Another critical characteristic of RDBMS systems is the support for [ACID transa
 
 ## Prerequisites
 
-First and foremost, you'll need to download this post's [GitHub repository](https://github.com/raphaeldovale/use_postgresql_with_spring_boot) that helps you if you have any doubts. Carefully selected branches are available to help you on each step of this article if you need any help.
+First and foremost, you'll need to download this post's [GitHub repository](https://github.com/raphaeldovale/use_postgresql_with_spring_boot) that helps you if you have any doubts. Carefully selected branches are available to help you on each step of this article if you need any assistance.
 
 You will also need PostgreSQL to run the tutorial. To install and test PostgreSQL I recommend using Docker:
 
@@ -39,6 +39,8 @@ You will also need PostgreSQL to run the tutorial. To install and test PostgreSQ
 ```
 
 The command above should run in any Linux, Windows, or MacOS distribution that has an instance of Docker installed. The first line pulls PostgreSQL version 11, while line *2* initiates a new instance of it with the name `dev-postgres,` running on port `5432`. The latest line executes a _DDL_ command to create the database `coursedb` into the instance. Keep in mind you are not creating a volume for the storage data so once the container is deleted, all its data wil be deleted as well.
+
+Please, keep in mind you must have [Docker](https://docs.docker.com/install) installed.
 
 ## Create Spring Boot App
 
@@ -70,20 +72,27 @@ Running `mvnw` will download Maven, all dependencies, and run the application go
 
 **TIP:** Use `git checkout database_configuration` to skip this section.
 
-You now have a system that has database dependencies but does not know where to connect. First, create a class named `net.dovale.okta.spring_boot_postgressql.config.DatabaseConfig` to configure your database:
+You now have a system that has database dependencies but does not know where to connect. First, change your main class (probably `com.okta.developer.springbootpostgressql.SpringBootPostgressqlApplication`) and add the annotation `@EnableTransactionManagement` to it, like this:
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.config;
+package com.okta.developer.springbootpostgressql;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration
+@SpringBootApplication
 @EnableTransactionManagement
-public class DatabaseConfig {}
+public class SpringBootPostgressqlApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootPostgressqlApplication.class, args);
+	}
+}
+
 ```
 
-Configuration classes in Spring allow you to set up your application using _type safe_ code. This means if something becomes inconsistent with your configuration, the configuration class will show compilation errors. The feature is a nice evolution from the older XML-based configuration Spring used to have. Previously, it was possible to get runtime errors since XML and your code was not linked.
+Configuration annotations in Spring allow you to set up your application using _type safe_ code. This means if something becomes inconsistent with your configuration, the it will show compilation errors. The feature is a nice evolution from the older XML-based configuration Spring used to have. Previously, it was possible to get runtime errors since XML and your code was not linked.
 
 Update `/src/main/resources/application.properties` too, to define your database connection properties:
 
@@ -97,8 +106,8 @@ spring.jpa.hibernate.ddl-auto=create
 
 Here's quick explanation of each property:
 
-* `spring.datasource.url` - describes the JDBC connection URL. Each RDBMS (like PostgreSQL, MySQL, Oracle, etc.) has its format. The IP `192.168.99.100` is the assigned by Docker to the host machine in Windows or MacOS machines. If you are running on Linux, you can change to `127.0.0.1` as the Docker Host is your machine.
-* `spring.datasource.username` - the username you will connect to the database. We are going to use the master user for this tutorial. For production, you should create a limited user for each application.
+* `spring.datasource.url` - describes the JDBC connection URL. Each RDBMS (like PostgreSQL, MySQL, Oracle, etc.) has its format. The IP `192.168.99.100` is the assigned by Docker to the host machine in Windows or MacOS machines. If you are running on Linux, you must change to `127.0.0.1` as the Docker Host is your machine.
+* `spring.datasource.username` - the username you will connect to the database. We are going to use the master user for this tutorial. **For production, you should create a limited user for each application**.
 * `spring.datasource.password` - The password we set when creating PostgreSQL docker instance.
 * `spring.jpa.properties.hibernate.dialect` - Although SQL is a standard, each database has some specific syntax that is addressed by hibernate dialect.
 * `spring.jpa.hibernate.ddl-auto` - Define if Hibernate can create, delete and create, update or validate the current Database Schema. Currently, you should set this property to `create` so Hibernate can handle all Database Schema.
@@ -146,35 +155,37 @@ To help your entities, you'll create a _superclass_ that handles the primary key
 Create the class `EntityWithUUID` in package `net.dovale.okta.spring_boot_postgressql.entities`:
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.entities;
+package com.okta.developer.springbootpostgressql.entities;
 
 import org.hibernate.annotations.Type;
+
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @MappedSuperclass
 public class EntityWithUUID {
-    @Id
-    @Type(type = "pg-uuid")
+    @Id @Type(type = "pg-uuid")
     private UUID id;
 
     public EntityWithUUID() {
         this.id = UUID.randomUUID();
     }
 }
+
 ```
 
 There are some excellent annotations here:
+
 * `@MappedSuperclass` says to JPA this class is a superclass of an entity and should have its attributes mapped into the entity.
 * `@Id` says the attribute is a primary key
 * `@Type`  specifies what type is used on the database. We need to specify since PostgreSQL have its type for UUIDs: `pg-uuid`.
 
-Now, create the two entities in the `net.dovale.okta.spring_boot_postgressql.entities` package:
+Now, create the two entities in the `net.dovale.okta.springbootpostgressql.entities` package:
 
 **Teacher.java**
 ```java
-package net.dovale.okta.spring_boot_postgressql.entities;
+package com.okta.developer.springbootpostgressql.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -192,10 +203,10 @@ public class Teacher extends EntityWithUUID {
 }
 ```
 
-**Couse.java**
+**Course.java**
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.entities;
+package com.okta.developer.springbootpostgressql.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -207,6 +218,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course extends EntityWithUUID {
+
     private String name;
     private int workload;
     private short rate;
@@ -224,29 +236,29 @@ The annotations have a significant influence in these classes:
 * `@Entity` - Indicates this class represents a persistent entity. It is interpreted as a table by JPA, and the table should have the same class name unless you change it.
 * `@ManyToOne` and `@JoinColumn` - Indicates there is a _Many to One_ relationship whose relationship uses of a _Join Column_. It is possible to set the foreign key if Hibernate is going to create the DDL.
 
-So far, so good. Now, create a DAO (_Data Access Object_, also called as _Repository_ by Spring) class for each entity in the `net.dovale.okta.spring_boot_postgressql.dao` package:
+So far, so good. Now, create a DAO (_Data Access Object_, also called as _Repository_ by Spring) class for each entity in the `net.dovale.okta.springbootpostgressql.dao` package:
 
 **CourseDAO**
 ```java
-package net.dovale.okta.spring_boot_postgressql.dao;
+package com.okta.developer.springbootpostgressql.dao;
 
-import net.dovale.okta.spring_boot_postgressql.entities.Course;
+import com.okta.developer.springbootpostgressql.entities.Course;
 import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;
 
 public interface CourseDAO extends CrudRepository<Course, UUID> {}
-
 ```
 
 **TeacherDAO**
 ```java
-package net.dovale.okta.spring_boot_postgressql.dao;
+package com.okta.developer.springbootpostgressql.dao;
 
-import net.dovale.okta.spring_boot_postgressql.entities.Teacher;
+import com.okta.developer.springbootpostgressql.entities.Teacher;
 import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;
 
 public interface TeacherDAO extends CrudRepository<Teacher, UUID> {}
+
 ```
 
 You now  have DAOs for each entity. You may be asking where is the implementation for them? _Spring Data_ has some sweet and intelligent ways to handle this. Since your interfaces extend `CrudRepository`, automatically Spring generates the concrete class with all [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) related operations available!
@@ -255,12 +267,12 @@ To fill some data, create a new service class called `DataFillerService`. It wil
 
 **DataFillerService.java**
 ```java
-package net.dovale.okta.spring_boot_postgressql.service;
+package com.okta.developer.springbootpostgressql.service;
 
-import net.dovale.okta.spring_boot_postgressql.dao.CourseDAO;
-import net.dovale.okta.spring_boot_postgressql.dao.TeacherDAO;
-import net.dovale.okta.spring_boot_postgressql.entities.Course;
-import net.dovale.okta.spring_boot_postgressql.entities.Teacher;
+import net.dovale.okta.springbootpostgressql.dao.CourseDAO;
+import net.dovale.okta.springbootpostgressql.dao.TeacherDAO;
+import net.dovale.okta.springbootpostgressql.entities.Course;
+import net.dovale.okta.springbootpostgressql.entities.Teacher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
@@ -318,6 +330,132 @@ The application creates several REST endpoints to access your DAO's method. Try 
 > curl http://localhost:8080/courses
 > curl http://localhost:8080/teachers
 ```
+
+## Securing Spring Data Rest with OAuth 2.0
+**TIP:** use `git checkout security` to skip this section
+
+You shouldn't expose your database structure without proper authentication. Let's solve this creating a _[OAuth 2.0 Resource Server]((https://www.oauth.com/oauth2-servers/the-resource-server/))_. A resource server is a service working in the infrastructure that has no login page, and it is used to server-to-server communications. In other words: it needs credentials but does not handle how they are acquired.
+
+First, you'll need to add these dependencies:
+
+```xml
+<dependency>
+    <groupId>com.okta.spring</groupId>
+    <artifactId>okta-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+The main class will also receive a new security configuration:
+
+```java
+package com.okta.developer.springbootpostgressql;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+@EnableTransactionManagement
+public class SpringBootPostgressqlApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootPostgressqlApplication.class, args);
+    }
+
+    @Configuration
+    static class OktaOAuth2WebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests().anyRequest().authenticated()
+                    .and()
+                    .oauth2ResourceServer().jwt();
+        }
+    }
+}
+```
+
+`OktaOAuth2WebSecurityConfigurerAdapter` defines our configuration. 
+* `.authorizeRequests().anyRequest().authenticated()` - tells Spring Security every request **must** be authenticated.
+* `.oauth2ResourceServer().jwt()` - tells the application is a Resource Server and will allows JWT tokens.
+
+Finally, add two new properties on `application.properties` file:
+
+```properties
+okta.oauth2.issuer=https://${yourOktaDomain}/oauth2/default
+okta.oauth2.clientId=${client_id}
+```
+
+These properties are going to tell Spring and Okta where are the OAuth 2.0 issuer and what is the client ID for this application...
+
+... Issuer, clientId, what am I talking about? To test the application, you need to [create a free-forever account on Okta](https://developer.okta.com/signup/) and set up a few things.
+
+>> @matt, this section was coppied from https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server. What do you think?
+
+In the Okta dashboard, create an application of type Service it indicates a resource server that does not have a login page or any way to obtain new tokens.
+
+<img src="/img/blog/postgresql-with-spring-boot/create-new-service.png" 
+     alt="Create new Service" width="800" class="center-image">
+
+Click **Next**, type the name of your service, then click **Done**. You will be presented with a screen similar to the one below. Copy and paste your _Client ID_ for later. It will be useful when you are starting your application.
+
+<img src="/img/blog/postgresql-with-spring-boot/service-created.png" 
+     alt="Service created" width="800" class="center-image">
+
+Now, start your application like before, but add two new environment variables:
+
+```bash
+> ./mvnw spring-boot:run -DyourOktaDomain=${yourDomain}-Dclient_id=${yourClientID}
+```
+Where `yourDomain` and `yourClientID` are the information provided by Okta's website.
+
+Run again `curl` (the `-v` attribute will return the response headers):
+```bash
+> curl -v http://localhost:8080/courses
+< HTTP/1.1 401 
+< Set-Cookie: JSESSIONID=6AA0A042FB1D69CC1CB9747820FDF5E1; Path=/; HttpOnly
+< WWW-Authenticate: Bearer
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Length: 0
+< Date: Thu, 20 Dec 2018 04:46:21 GMT
+```
+
+The server answered a 401 Http code, which means you are unauthorized. Now, let's create a valid token. An easy way to achieve a token to generate one using [OpenID Connect <debugger/>](https://oidcdebugger.com/).
+
+First, you’ll need to create a new Web application in Okta:
+
+<img src="/img/blog/postgresql-with-spring-boot/create-new-web-application.png" 
+     alt="New web application" width="800" class="center-image">
+
+Set the _Login redirect URIs_ field to https://oidcdebugger.com/debug and _Grant Type Allowed_ to Hybrid. Click **Done** and copy the client ID for the next step.
+
+Now, on the OpenID Connect website, fill the form in like the picture below (do not forget to fill in the client ID for your recently created Okta web application):
+
+<img src="/img/blog/postgresql-with-spring-boot/openid-connect.png" 
+     alt="OpenID connect" width="800" class="center-image">
+
+Submit the form to start the authentication process. You’ll receive an Okta login form if you are not logged in or you’ll see the screen below with your custom token.
+
+<img src="/img/blog/postgresql-with-spring-boot/openid-connect-token.png" 
+     alt="Token from OpenID connect" width="800" class="center-image">
+
+The token will be valid for one hour so you can do a lot of testing with your API. It’s simple to use the token, just copy it and modify the curl command to use it as follows:
+
+```bash
+> export TOKEN=${YOUR_TOKEN}
+> curl -v -H "Authorization: Bearer $TOKEN" http://localhost:8080/teachers
+```
+
+And its done!
 
 ## Versioning and Securing Database Version Changes
 **TIP:** use `git checkout migration` to skip this section
@@ -450,7 +588,7 @@ Before starting the project again, delete the class `DataFillerService` since th
 In `application.properties` change the `ddl-auto` configuration to `validate`:
 
 ```properties
-spring.jpa.hibernate.ddl-auto = validate
+spring.jpa.hibernate.ddl-auto=validate
 ```
 
 It means Hibernate validates if the Schema matches with what was defined in Java. If no match is found, the application will not startup.
@@ -526,7 +664,7 @@ public class EntityWithUUID {
 Now, create a  class called `Review` in the `entities` package:
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.entities;
+package net.dovale.okta.springbootpostgressql.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -565,7 +703,7 @@ public class Teacher extends EntityWithUUID {
 }
 ```
 
-Now you have set a list of data type `jsonb` but also added a _fetch = LAZY_ property. The property tells Hibernate to **NOT** retrieve the attribute value unless asked. Without the property, every call to a teacher instance will process JSON and create review objects. Hibernate needs a Maven plugin to work with lazy attributes properly. Edit the `pom.xml` file and add the following snippet in the `<plugins>` node.
+Now you have set a list of data type `jsonb` but also added a `fetch = LAZY` property. The property tells Hibernate to **NOT** retrieve the attribute value unless asked. Without the property, every call to a teacher instance will process JSON and create review objects. Hibernate needs a Maven plugin to work with lazy attributes properly. Edit the `pom.xml` file and add the following snippet in the `<plugins>` node.
 
 ```xml
 <plugin>
@@ -590,9 +728,9 @@ OK, you are almost there. You just need to add some methods to add reviews to a 
 **TeacherService.java**
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.service;
+package net.dovale.okta.springbootpostgressql.service;
 
-import net.dovale.okta.spring_boot_postgressql.entities.Review;
+import net.dovale.okta.springbootpostgressql.entities.Review;
 import javax.validation.constraints.NotNull;
 
 public interface TeacherService {
@@ -609,11 +747,11 @@ public interface TeacherService {
 **SimpleTeacherService.java**
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.service;
+package net.dovale.okta.springbootpostgressql.service;
 
-import net.dovale.okta.spring_boot_postgressql.dao.TeacherDAO;
-import net.dovale.okta.spring_boot_postgressql.entities.Review;
-import net.dovale.okta.spring_boot_postgressql.entities.Teacher;
+import net.dovale.okta.springbootpostgressql.dao.TeacherDAO;
+import net.dovale.okta.springbootpostgressql.entities.Review;
+import net.dovale.okta.springbootpostgressql.entities.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -652,10 +790,10 @@ public class SimpleTeacherService implements TeacherService {
 **TeacherController**
 
 ```java
-package net.dovale.okta.spring_boot_postgressql.controllers;
+package net.dovale.okta.springbootpostgressql.controllers;
 
-import net.dovale.okta.spring_boot_postgressql.entities.Review;
-import net.dovale.okta.spring_boot_postgressql.service.TeacherService;
+import net.dovale.okta.springbootpostgressql.entities.Review;
+import net.dovale.okta.springbootpostgressql.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -696,6 +834,7 @@ Moreover, test the review upload by running CURL:
 
 ```bash
 curl -X POST \
+  -H "Authorization: Bearer $TOKEN"\
   http://localhost:8080/teachers/531e4cdd-bb78-4769-a0c7-cb948a9f1238/review \
   -H 'Content-Type: application/json' \
   -d '{
