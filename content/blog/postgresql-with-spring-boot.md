@@ -334,7 +334,7 @@ The application creates several REST endpoints to access your DAO's method. Try 
 ## Securing Spring Data Rest with OAuth 2.0
 **TIP:** use `git checkout security` to skip this section
 
-You shouldn't expose your database structure without proper authentication. Let's solve this creating a _[OAuth 2.0 Resource Server]((https://www.oauth.com/oauth2-servers/the-resource-server/))_. A resource server is a service working in the infrastructure that has no login page, and it is used to server-to-server communications. In other words: it needs credentials but does not handle how they are acquired.
+You shouldn't expose your database structure without proper authentication. Let's solve this creating an _[OAuth 2.0 Resource Server]((https://www.oauth.com/oauth2-servers/the-resource-server/))_. A resource server is a service working in the infrastructure that has no login page, and it is used to server-to-server communications. In other words: it needs credentials but does not handle how they are acquired.
 
 First, you'll need to add these dependencies:
 
@@ -394,7 +394,7 @@ These properties are going to tell Spring and Okta where are the OAuth 2.0 issue
 
 ... Issuer, clientId, what am I talking about? To test the application, you need to [create a free-forever account on Okta](https://developer.okta.com/signup/) and set up a few things.
 
->> @matt, this section was coppied from https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server. What do you think?
+>> @matt, this section was copied from https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server. What do you think?
 
 In the Okta dashboard, create an application of type Service it indicates a resource server that does not have a login page or any way to obtain new tokens.
 
@@ -849,6 +849,7 @@ In this tutorial, we explore the integration with Spring Boot and PostgreSQL and
 
 There is plenty of knowledge to learn about JPA, Hibernate and PostgreSQL. Please refer to the following articles if you are interested in learning more:
 
-**
-
-
+* [Create a Secure Spring REST API](https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server)
+* [Build a Basic App with Spring Boot and JPA using PostgreSQL](https://developer.okta.com/blog/2018/12/13/build-basic-app-spring-boot-jpa)
+* [Use React and Spring Boot to Build a Simple CRUD App](https://developer.okta.com/blog/2018/07/19/simple-crud-react-and-spring-boot)
+* [Build a Basic CRUD App with Angular 7.0 and Spring Boot 2.1 ](https://developer.okta.com/blog/2018/08/22/basic-crud-angular-7-and-spring-boot-2)
