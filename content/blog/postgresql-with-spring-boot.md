@@ -27,24 +27,28 @@ Another critical characteristic of RDBMS systems is the support for [ACID transa
 
 ## Prerequisites
 
-First and foremost, you'll need to download this post's [GitHub repository](https://github.com/raphaeldovale/use_postgresql_with_spring_boot) that helps you if you have any doubts. Carefully selected branches are available to help you on each step of this article if you need any assistance.
+First and foremost, you'll need to clone this post's [GitHub repository](https://github.com/oktadeveloper/okta-postgresql-spring-boot-example) that helps you if you have any doubts. Carefully selected branches are available to help you on each step of this article if you need any assistance.
 
 You will also need PostgreSQL to run the tutorial. To install and test PostgreSQL I recommend using Docker:
 
 ```bash
-1. > docker pull postgres:11
-2. > docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
+docker pull postgres:11
+docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
 # CREATE db coursedb
-3. > docker exec dev-postgres psql -U postgres -c"CREATE DATABASE coursedb" postgres
+docker exec dev-postgres psql -U postgres -c"CREATE DATABASE coursedb" postgres
 ```
 
-The command above should run in any Linux, Windows, or MacOS distribution that has an instance of Docker installed. The first line pulls PostgreSQL version 11, while line *2* initiates a new instance of it with the name `dev-postgres,` running on port `5432`. The latest line executes a _DDL_ command to create the database `coursedb` into the instance. Keep in mind you are not creating a volume for the storage data so once the container is deleted, all its data wil be deleted as well.
+The command above should run in any Linux, Windows, or MacOS distribution that has an instance of Docker installed. The first line pulls PostgreSQL version 11; the second line initiates a new instance of it with the name `dev-postgres,` running on port `5432`. The latest line executes a DDL command to create the database `coursedb` into the instance. Keep in mind you are not creating a volume for the storage data so once the container is deleted, all its data wil be deleted as well.
 
 Please, keep in mind you must have [Docker](https://docs.docker.com/install) installed.
 
 ## Create Spring Boot App
 
-**TIP:** If you’d like to skup this section, you can simply clone this post’s repo and checkout the `start` branch: `git checkout start` 
+**TIP:** If you’d like to skip this section, you can simply clone this post’s repo and checkout the `start` branch:
+
+```
+git clone -b start https://github.com/oktadeveloper/okta-postgresql-spring-boot-example.git
+```
 
 First, you need to create a new project with needed dependencies. Thankfully, Spring has the right tool for us: [Spring Initialzr](https://start.spring.io/).
 
@@ -61,7 +65,7 @@ Configure your project as the image above:
 Download the file and unzip it. Do you know you can already run this application? Simply run the command line below:
 
 ```bash
-> ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 > **Note**: depending on your operating system, you need to change `./mvnw` to `mvnw` into the command line. 
@@ -94,7 +98,7 @@ public class SpringBootPostgressqlApplication {
 
 Configuration annotations in Spring allow you to set up your application using _type safe_ code. This means if something becomes inconsistent with your configuration, the it will show compilation errors. The feature is a nice evolution from the older XML-based configuration Spring used to have. Previously, it was possible to get runtime errors since XML and your code was not linked.
 
-Update `/src/main/resources/application.properties` too, to define your database connection properties:
+Update `/src/main/resources/application.properties` to define your database connection properties:
 
 ```properties 
 spring.datasource.url=jdbc:postgresql://192.168.99.100:5432/coursedb
@@ -107,15 +111,15 @@ spring.jpa.hibernate.ddl-auto=create
 Here's quick explanation of each property:
 
 * `spring.datasource.url` - describes the JDBC connection URL. Each RDBMS (like PostgreSQL, MySQL, Oracle, etc.) has its format. The IP `192.168.99.100` is the assigned by Docker to the host machine in Windows or MacOS machines. If you are running on Linux, you must change to `127.0.0.1` as the Docker Host is your machine.
-* `spring.datasource.username` - the username you will connect to the database. We are going to use the master user for this tutorial. **For production, you should create a limited user for each application**.
-* `spring.datasource.password` - The password we set when creating PostgreSQL docker instance.
+* `spring.datasource.username` - the username you will connect to the database. You are going to use the master user for this tutorial. **For production, you should create a limited user for each application**.
+* `spring.datasource.password` - The password you set when creating PostgreSQL docker instance.
 * `spring.jpa.properties.hibernate.dialect` - Although SQL is a standard, each database has some specific syntax that is addressed by hibernate dialect.
 * `spring.jpa.hibernate.ddl-auto` - Define if Hibernate can create, delete and create, update or validate the current Database Schema. Currently, you should set this property to `create` so Hibernate can handle all Database Schema.
 
 What happens if you start up the application again?
 
 ```bash
-> ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 Now the application starts and you should be able to open `http://localhost:8080` in your browser. Nothing nice happens as you haven't written any code for the UI yet. You may see an error stack on initialization: don’t worry, it is simply Hibernate telling the JDBC driver does not support a feature (method `createClob`).
@@ -123,7 +127,7 @@ Now the application starts and you should be able to open `http://localhost:8080
 ## Create Persistent Entities and DAO's
 **TIP:** use `git checkout entities` to skip this section
 
-OK, now let's do real work.
+OK, now let's do some real work.
 
 First of all, let's look at this tutorial's schema. It has two entities:
 
@@ -236,9 +240,9 @@ The annotations have a significant influence in these classes:
 * `@Entity` - Indicates this class represents a persistent entity. It is interpreted as a table by JPA, and the table should have the same class name unless you change it.
 * `@ManyToOne` and `@JoinColumn` - Indicates there is a _Many to One_ relationship whose relationship uses of a _Join Column_. It is possible to set the foreign key if Hibernate is going to create the DDL.
 
-So far, so good. Now, create a DAO (_Data Access Object_, also called as _Repository_ by Spring) class for each entity in the `net.dovale.okta.springbootpostgressql.dao` package:
+So far, so good. Now, create a DAO (_Data Access Object_, also called a _Repository_ by Spring) class for each entity in the `net.dovale.okta.springbootpostgressql.dao` package:
 
-**CourseDAO**
+**CourseDAO.java**
 ```java
 package com.okta.developer.springbootpostgressql.dao;
 
@@ -249,7 +253,7 @@ import java.util.UUID;
 public interface CourseDAO extends CrudRepository<Course, UUID> {}
 ```
 
-**TeacherDAO**
+**TeacherDAO.java**
 ```java
 package com.okta.developer.springbootpostgressql.dao;
 
@@ -321,20 +325,20 @@ The method `fillData` is automatically called by Spring Context as soon the appl
 Now, you can test if your application is working: 
 
 ```bash
-> ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 The application creates several REST endpoints to access your DAO's method. Try some commands: 
 
 ```bash
-> curl http://localhost:8080/courses
-> curl http://localhost:8080/teachers
+curl http://localhost:8080/courses
+curl http://localhost:8080/teachers
 ```
 
 ## Securing Spring Data Rest with OAuth 2.0
 **TIP:** use `git checkout security` to skip this section
 
-You shouldn't expose your database structure without proper authentication. Let's solve this creating an _[OAuth 2.0 Resource Server]((https://www.oauth.com/oauth2-servers/the-resource-server/))_. A resource server is a service working in the infrastructure that has no login page, and it is used to server-to-server communications. In other words: it needs credentials but does not handle how they are acquired.
+You shouldn't expose your database structure without proper authentication. Let's solve this creating an _[OAuth 2.0 Resource Server](https://www.oauth.com/oauth2-servers/the-resource-server/)_. A resource server is a service working in the infrastructure that has no login page, and it is used to server-to-server communications. In other words: it needs credentials but does not handle how they are acquired.
 
 First, you'll need to add these dependencies:
 
@@ -371,9 +375,9 @@ public class SpringBootPostgressqlApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .authorizeRequests().anyRequest().authenticated()
-                    .and()
-                    .oauth2ResourceServer().jwt();
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .oauth2ResourceServer().jwt();
         }
     }
 }
@@ -395,6 +399,7 @@ These properties are going to tell Spring and Okta where are the OAuth 2.0 issue
 ... Issuer, clientId, what am I talking about? To test the application, you need to [create a free-forever account on Okta](https://developer.okta.com/signup/) and set up a few things.
 
 >> @matt, this section was copied from https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server. What do you think?
+>> @raphael: I think you should create a "web" application, rather than a service application. 
 
 In the Okta dashboard, create an application of type Service it indicates a resource server that does not have a login page or any way to obtain new tokens.
 
@@ -409,7 +414,7 @@ Click **Next**, type the name of your service, then click **Done**. You will be 
 Now, start your application like before, but add two new environment variables:
 
 ```bash
-> ./mvnw spring-boot:run -DyourOktaDomain=${yourDomain}-Dclient_id=${yourClientID}
+> ./mvnw spring-boot:run -DyourOktaDomain=${yourDomain} -Dclient_id=${yourClientID}
 ```
 Where `yourDomain` and `yourClientID` are the information provided by Okta's website.
 
@@ -429,7 +434,7 @@ Run again `curl` (the `-v` attribute will return the response headers):
 < Date: Thu, 20 Dec 2018 04:46:21 GMT
 ```
 
-The server answered a 401 Http code, which means you are unauthorized. Now, let's create a valid token. An easy way to achieve a token to generate one using [OpenID Connect <debugger/>](https://oidcdebugger.com/).
+The server returns a 401 HTTP code, which means you are unauthorized. Now, let's create a valid token. An easy way to achieve a token to generate one using [OpenID Connect <debugger/>](https://oidcdebugger.com/).
 
 First, you’ll need to create a new Web application in Okta:
 
@@ -441,7 +446,7 @@ Set the _Login redirect URIs_ field to https://oidcdebugger.com/debug and _Grant
 Now, on the OpenID Connect website, fill the form in like the picture below (do not forget to fill in the client ID for your recently created Okta web application):
 
 <img src="/img/blog/postgresql-with-spring-boot/openid-connect.png" 
-     alt="OpenID connect" width="800" class="center-image">
+     alt="OpenID connect" width="700" class="center-image">
 
 Submit the form to start the authentication process. You’ll receive an Okta login form if you are not logged in or you’ll see the screen below with your custom token.
 
@@ -473,7 +478,7 @@ First, add Flyway as a dependency in `pom.xml`. When Spring detects Flyway on th
 </dependency>
 ```
 
-By default, Flyway looks at files in the format `V$X__$DESCRIPTION.sql`, where $X is the migration version name, in folder `/resource/db/migration`. Create two files: one for the DDL and another for sample data:
+By default, Flyway looks at files in the format `V$X__$DESCRIPTION.sql`, where $X is the migration version name, in folder `src/main/resource/db/migration`. Create two files: one for the DDL and another for sample data:
 
 **V1__ddl.sql**
 ```sql
@@ -596,15 +601,15 @@ It means Hibernate validates if the Schema matches with what was defined in Java
 Delete and create a new PostgreSQL database instance, since the first instance was creating using JPA.
 
 ```bash
-> docker rm -f dev-postgres
-> docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
-> docker exec dev-postgres psql -U postgres -c"CREATE DATABASE coursedb" postgres
+docker rm -f dev-postgres
+docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
+docker exec dev-postgres psql -U postgres -c"CREATE DATABASE coursedb" postgres
 ```
 
 Now, start Spring Boot again:
 
 ```bash
-> ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 You will see the same data exposed, but if you have a look into the logs, will notice Flyway is running database migration:
@@ -648,7 +653,7 @@ The column `reviews` stores a JSON array with all reviews a teacher received. Fi
 ```java
 @MappedSuperclass
 @TypeDefs({
-        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+    @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
 public class EntityWithUUID {
     @Id
@@ -827,7 +832,7 @@ In `SimpleTeacherService`, note that there  is an annotation `@Transactional(iso
 You can now run
 
 ```bash
-> ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 Moreover, test the review upload by running CURL:
