@@ -1,0 +1,38 @@
+---
+layout: blog_post
+title: "Which Java SDK should you use?"
+author: mraible
+date: 2019-01-15T00:00:00Z
+description: "Have you heard that Oracle is now charging if you want to use its SDK in production? This post explores the many free options available for the Java SDK."
+tags: [java, java sdk, openjdk, oracle]
+tweets:
+- todo1
+- todo2
+- todo3
+image: blog/featured/okta-java-skew.jpg
+---
+:page-liquid:
+
+Intro, discuss 6-month release cycle, LTS, and controversy with Oracle in production.
+
+== Java SDK Options
+
+List plethora of Java SDK options
+
+== Which Java SDK should you use?
+
+My opinion
+
+== Q and A with Okta's Java Experts
+
+Les, Demers, and Micah + others they recommend
+
+=== How do you interact with Java on a daily basis?
+
+=== Which Java SDK do you recommend?
+
+=== What are your thoughts on the future of Java?
+
+== Learn more about Java and Okta
+
+
