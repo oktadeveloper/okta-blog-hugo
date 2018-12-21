@@ -1,0 +1,46 @@
+---
+layout: blog_post
+title: "Developer Relations Pro Tips"
+author: mraible
+date: 2019-01-09T00:00:00Z
+description: "Want to be in developer relations or speak at conferences? This blog post has a plethora of tips from a bunch of folks who've been there and done that!"
+tags: [devrel, developer relations, protips, speakerlife]
+tweets:
+- todo1
+- todo2
+- todo3
+image: blog/featured/okta-java-skew.jpg
+---
+:page-liquid:
+
+Intro with tweet https://twitter.com/mraible/status/1074679374417399808 and travel less, write more.
+
+I thought it'd be fun...
+
+I started with a group of people I'm lucky enough to call friends, and I asked them for their advice.
+
+Josh Long
+Venkat S
+Trisha Gee
+Simon Maple
+Markus Eisele
+
+Pratik Patel
+Sarah Drasner
+Bruno Borges
+Mike Harrington
+James Governor
+Dan Allen
+
+OktaDev
+
+Lee
+Randall
+Aaron
+David
+
+== Go Forth, and Be Awesome!
+
+Graphic from David.
+
+
