@@ -316,7 +316,6 @@ You can register for a [free-forever developer account](https://developer.okta.c
 And fill the next form with the following values:
 
 <img src="/img/blog/build-spring-microservices-with-docker/okta-new-web-application-step2.png" alt="New web application, Step 2" width="800" class="center-image">
-![New web application](okta-new-web-application-step2.png)
 
 The page will return you an application ID and an secret key. Keep then safe and create a filled called `school-ui.properties` on the root configuration folder with the following content. Do not forget to fill the variables values:
 
