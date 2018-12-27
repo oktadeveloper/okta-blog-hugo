@@ -357,20 +357,22 @@ Now, starts both _school-service_ and _school-ui_ (and keep Discovery service up
 
 Now your services are sharing info with the Discovery server. You can test the application again and see that it work as always. Just type on your browser http://localhost:8080 to check it out.
 
-> You can check the code result from now on branch `discovery-server`
+**TIP** You can check the code result from now on branch `discovery-server`
 
 ## Global Configuration
 
-Our goal is to remove any trace of configuration in the project. First, configuration URL was removed from the project and became managed by a service. Now, we can do a similar thing for every configuration on the project using [_Spring Cloud Config_](https://spring.io/projects/spring-cloud-config).
+Our goal is to remove any trace of configuration values in the project source. First, configuration URL was removed from the project and became managed by a service. Now, we can do a similar thing for every configuration on the project using [_Spring Cloud Config_](https://spring.io/projects/spring-cloud-config).
 
-First, create the configuration project:
+First, create the configuration project using [Spring Initialzr] (http://start.spring.com) and the following parameters:
 
-<img src="/img/blog/build-spring-microservices-with-docker/initializr-config.png" alt="Config Service" width="800" class="center-image">
+* Group: com.okta.developer.docker_microservices
+* Artifact: config
+* Dependencies: Config Server, Eureka Discovery
 
 On the main class, add `@EnableConfigServer`:
 
 ```java
-package net.dovale.okta.docker_microservices.config;
+package com.okta.developer.dockermicroservices.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -379,11 +381,12 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @SpringBootApplication
 @EnableConfigServer
 public class ConfigApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ConfigApplication.class, args);
-    }
-}
 
+	public static void main(String[] args) {
+		SpringApplication.run(ConfigApplication.class, args);
+	}
+
+}
 ```
 
 And on project's application.properties:
@@ -397,10 +400,11 @@ eureka.client.serviceUrl.defaultZone=${EUREKA_SERVER:http://localhost:8761/eurek
 ```
 
 Some explanation about the properties:
-* spring.profiles.active=native - indicates Spring Cloud Config must use native filesystem to obtain the configuration. Normally GIT repositories are used but we are going to stick with native filesystem for simplification.
+
+* spring.profiles.active=native - indicates Spring Cloud Config must use native filesystem to obtain the configuration. Normally GIT repositories are used but we are going to stick with native filesystem for simplicity sake.
 * spring.cloud.config.server.native.searchLocations - The path containing the configuration files. Choose an empty folder on your computer.
 
-Now, we need something to configure and apply on our example... how about Okta's configuration?? Let's put our _school-ui_ behind an authorization layer and use the configuration provided here.
+Now, we need something to configure and apply on our example... how about Okta's configuration?? Let's put our _school-ui_ behind an authorization layer and use the configuration provided in configuration project.
 
 You can register for a [free-forever developer account](https://developer.okta.com/signup/) that will enable you to create as many user and applications you need to use in our tutorial! After created, please create a new Web Application on Okta's dashboard:
 
@@ -410,7 +414,7 @@ And fill the next form with the following values:
 
 <img src="/img/blog/build-spring-microservices-with-docker/okta-new-web-application-step2.png" alt="New web application, Step 2" width="800" class="center-image">
 
-The page will return you an application ID and an secret key. Keep then safe and create a file called `school-ui.properties` on the root configuration folder with the following content. Do not forget to fill the variables values:
+The page will return you an application ID and an secret key. Keep then safe and create a file called `school-ui.properties` on the root configuration folder (a folder in our file system that will be pointed out in _application.properties_ file) with the following content. Do not forget to fill the variables values:
 
 ```properties
 okta.oauth2.issuer=https://${DOMAIN}/oauth2/default
@@ -418,7 +422,216 @@ okta.oauth2.clientId=${CLIENT_ID}
 okta.oauth2.clientSecret=${CLIENT_SECRET}
 ```
 
-Now we need to change a thing or two on the _school-ui_ project.
+Now, run the configuration project and check if its getting the configuration data propertly:
+
+```bash
+> ./mvnw clean spring-boot:run
+> curl http://localhost:8888/school-ui.properties
+okta.oauth2.clientId: YOUR_CLIENT_ID
+okta.oauth2.clientSecret: YOUR_CLIENT_SECRET
+okta.oauth2.issuer: https://YOUR_DOMAIN/oauth2/default
+```
+
+### Changes in School-ui to use Spring Cloud config and Oauth 2.0
+Now we need to change _school-ui_ project a litle bit.
+
+First, we need to change `school-ui/pom.xml` and add some new dependencies:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.okta.spring</groupId>
+    <artifactId>okta-spring-boot-starter</artifactId>
+    <version>0.6.1</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework.security.oauth.boot</groupId>
+    <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.security.oauth</groupId>
+    <artifactId>spring-security-oauth2</artifactId>
+    <version>2.2.0.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.thymeleaf.extras</groupId>
+    <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+</dependency>
+```
+
+On the same file, you should add Spring Milestone repository so maven will download _Sring Cloud_ dependencies:
+
+```xml
+<repositories>
+    <repository>
+        <id>spring-milestones</id>
+        <name>Spring Milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+Create a new class for security configuration
+
+`com.okta.developer.microservicedockerspring.ui.config.SpringSecurityConfiguration`
+```java
+package com.okta.developer.microservicedockerspring.ui.config;
+
+import org.springframework.boot.autoconfigure.security.oauth2.client.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.config.annotation.method.configuration.*;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
+
+@Configuration
+@EnableOAuth2Sso
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SpringSecurityConfiguration extends OAuth2SsoDefaultConfiguration {
+
+    protected static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {
+        @Override
+        protected MethodSecurityExpressionHandler createExpressionHandler() {
+            return new OAuth2MethodSecurityExpressionHandler();
+        }
+    }
+
+    public SpringSecurityConfiguration(ApplicationContext applicationContext) {
+        super(applicationContext);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/").permitAll();
+        super.configure(http);
+        http.logout().logoutSuccessUrl("/");
+    }
+}
+
+```
+Change your `com.okta.developer.microservicedockerspring.ui.controller.SchoolController` so only users with scope `profile` will be allowed (every logged user have it)
+
+```java
+@GetMapping("/classes")
+@PreAuthorize("#oauth2.hasAnyScope('profile')")
+public ResponseEntity<List<TeachingClassDto>> listClasses(){
+    return restTemplate
+        .exchange("http://school-service/class", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<TeachingClassDto>>() {});
+}
+```
+
+Some configurations need to be defined at project boot time. Spring had a clever solution to properly locate and extract configuration data _before_ context startup. You just need to create a file `src/main/resources/bootstrap.yml` like this:
+
+```yml
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+spring:
+  application:
+    name: school-ui
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIGSERVER
+```
+
+The bootstrap file creates a pre-boot Spring Application Context responsible to extract configuration before the real application starts. You need to move all properties from `application.properties` to this file as Spring needs to know where _Eureka Server_ is located and how it should search for configuration. In the example above, we enabled configuration over discovery service (`spring.cloud.config.discovery.enabled`) and what is the Configuration service-id.
+
+The `application.properties` file will be like this (only some OAuth 2.0 properties): 
+
+```properties
+security.oauth2.sso.login-path=/authorization-code/callback
+security.oauth2.client.client-authentication-scheme=header
+```
+
+`src/main/resources/templates/index.hml` is our last file to modify. We will show a _login_ button if the user is logged off and the result plus the _logoff_ if the user is logged in.
+
+```html
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<nav class="nvbar nvbar-default">
+    <form method="post" th:action="@{/logout}" th:if="${#authorization.expression('isAuthenticated()')}" class="navbar-form navbar-right">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button id="logout-button" type="submit" class="btn btn-danger">Logout</button>
+    </form>
+    <form method="get" th:action="@{/authorization-code/callback}" th:unless="${#authorization.expression('isAuthenticated()')}">
+        <button id="login-button" class="btn btn-primary" type="submit">Login</button>
+    </form>
+</nav>
+
+<div id="content" th:if="${#authorization.expression('isAuthenticated()')}">
+    <h1>School classes</h1>
+
+    <table id="classes">
+        <thead>
+        <tr>
+            <th>Course</th>
+            <th>Teacher</th>
+            <th>Year</th>
+            <th>Number of studends</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="static/js/school_classes.js"></script>
+</div>
+
+</body>
+</html>
+```
+
+We have some nice Thymeleaf properties here:
+
+* `@{/logout}` - returns the logout URL defined on the backend
+* `th:if="${#authorization.expression('isAuthenticated()')}"` - only print the HTML if the user is **logged in**
+* `@{/authorization-code/callback}` - returns the authenticated URL callback
+* `th:unless="${#authorization.expression('isAuthenticated()')}"` - only print the HTML inside the node if the user is **logged off**
+
+Now start configuration project and school-ui again. By typing `http://localhost:8080` you should see the following screen:
+
+<img src="/img/blog/build-spring-microservices-with-docker/school-ui-loggedin.png" alt="Log in" width="400" class="center-image">
+
+After logged in, the screen should appears like this one:
+
+<img src="/img/blog/build-spring-microservices-with-docker/school-ui-loggedoff.png" alt="Log off" width="400" class="center-image">
+
+Now we have an application using Spring Cloud config and Eureka for service discovery. Now, we are goint one step futher and will Dockerize every service.
+
+**TIP** You can check the code result from now on branch `configuration`
 
 ## Dockerizing
 
