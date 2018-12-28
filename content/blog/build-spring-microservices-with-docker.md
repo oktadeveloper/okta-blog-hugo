@@ -635,7 +635,152 @@ Now we have an application using Spring Cloud config and Eureka for service disc
 
 ## Dockerizing
 
+Now we reach to the last stage on our journey throught microservices. [Docker](https://www.docker.com/) is a marvelous technology that allows create system images similar to _Virtual Machines_ but that shares the same Kernel of the host operational system. This feature increases system performance and startup time. Also, Docker provided a clever build systems that guarantee once an image is created, it wont't be changed, ever. In other words: no more "it works on my machine"!
+
+**TIP** Need more Docker background? Have a look on this [article](https://developer.okta.com/blog/2017/05/10/developers-guide-to-docker-part-1)
+
+You'll create one image for each project we created until now. They'll have the same Maven configuration and `Dockerfile` content in the root folder of each project (eg.: `school-ui/Dockerfile`).
+
+**For each project pom, add**
+```xml
+(...)
+<plugins>
+(...)
+    <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <version>1.4.9</version>
+        <executions>
+            <execution>
+                <id>default</id>
+                <goals>
+                    <goal>build</goal>
+                    <goal>push</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <repository>developer.okta.com/microservice-docker-${artifactId}</repository>
+            <tag>${project.version}</tag>
+            <buildArgs>
+                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+            </buildArgs>
+        </configuration>
+    </plugin>
+</plugins>
+(...)
+```
+
+These will configure _dockerfile-maven-plugin_ to build a Docker image every time you run `./mvnw install`. Each image will be created with the name `developer.okta.com/microservice-docker-${artifactId}` where `artifactId` vary by project.
+
+**DockerFile**
+```Dockerfile
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+ADD target/*.jar app.jar
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+```
+
+The `Dockerfile` follows what is recommended by [Spring](https://spring.io/guides/gs/spring-boot-docker/).
+
+Now, let's change `school-ui/src/main/resources/bootstrap.yml` and add a new configuration:
+
+```yml
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+spring:
+  application:
+    name: school-ui
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: CONFIGSERVER
+      failFast: true
+```
+
+`spring.cloud.failFast` tells Spring Cloud Config to terminate the application as soon as it can't find the configuration server. This will be usefull for the next step.
+
+
+### Docker Compose
+
+Now, you'll create a new file called `docker-compose.yml` which will define how each project will start:
+
+```yml
+version: '3'
+services:
+  discovery:
+    image: developer.okta.com/microservice-docker-discovery:0.0.1-SNAPSHOT
+    ports:
+      - 8761:8761
+  config:
+    image: developer.okta.com/microservice-docker-config:0.0.1-SNAPSHOT
+    volumes:
+      - ./config-data:/var/config-data
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://discovery:8761/eureka
+         -Dspring.cloud.config.server.native.searchLocations=/var/config-data
+    depends_on:
+      - discovery
+    ports:
+      - 8888:8888
+  school-service:
+    image: developer.okta.com/microservice-docker-school-service:0.0.1-SNAPSHOT
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:8761/eureka
+    depends_on:
+      - discovery
+      - config
+  school-ui:
+    image: developer.okta.com/microservice-docker-school-ui:0.0.1-SNAPSHOT
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:8761/eureka
+    restart: on-failure
+    depends_on:
+      - discovery
+      - config
+    ports:
+      - 8080:8080
+```
+
+As you can see, each project is now a declared service in Docker compose file. It'll have its ports exposed and some other properties.
+
+* All projects besides _Discovery_ will have a variable value `-DEUREKA_SERVER=http://discovery:8761/eureka`. This will tell where to find the Discovery server. Docker Compose creates a virtual network between the services and the DNS name used for each service is its own name: that's why is possible to use `discovery` as the hostname.
+* Config service will have a volume going to configuration files. This volume will be mapped to `/var/config-data` inside the docker container. Also, the property `spring.cloud.config.server.native.searchLocations` will be overwritten to the same value.
+* _School-ui_ project will have the property `restart: on-failure`. This set Docker Compose to restart the application as soon as it fails. Using together with `failFast` property allows the application keep trying to start until the _Discovery_ and _Config_ projects are completelly ready.
+
+And that's it! Now, just build the images (each command on the root folder):
+
+```bash
+cd school-ui && ./mvnw clean install
+cd school-service && ./mvnw clean install
+cd config && ./mvnw clean install
+cd discovery && ./mvnw clean install
+```
+
+Now, run the docker compose (run it on the same folder `docker-compose.yml` is stored).
+
+```bash
+docker-compose up -d
+Starting okta-microservice-docker-post-final_discovery_1 ... done
+Starting okta-microservice-docker-post-final_config_1    ... done
+Starting okta-microservice-docker-post-final_school-ui_1      ... done
+Starting okta-microservice-docker-post-final_school-service_1 ... done
+```
+
+Now you just need to browse the application as in the previous section.
+
+**TIP** You can check the code result from now on branch `docker`
+
 ## Using profiles
+
+
 
 ## Summary
 
