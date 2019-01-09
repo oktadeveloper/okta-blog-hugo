@@ -4,10 +4,10 @@ title: "Spring Boot with PostgreSQL"
 author: raphaeldovale
 date: 2018-12-20T00:00:00Z
 description: "This article presents how a developer can integrate Spring Boot and PostgreSQL, using some exclusive property and NoSQL column types"
-tags: [PostgreSQL, SQL, NoSQL, JPA, Hibernate, java, spring boot]
+tags: [postgresql, sql, nosql, jpa, hibernate, java, spring boot]
 tweets:
 - "In doubt how to integrate Spring Boot and Hibernate? This article is for you!"
-- "Use PostgreSQL as an NoSQL database with Spring Boot!"
+- "Use PostgreSQL as a NoSQL database with Spring Boot!"
 image: blog/featured/okta-java-short-skew.jpg
 ---
 
@@ -19,7 +19,7 @@ Let's dig into it!
 
 ## Relational Databases and PostgreSQL
 
-Initially proposed in [the 70's](https://en.wikipedia.org/wiki/Relational_database), RDBMS (*Relational Database Management System*) has grown in popularity over the latest decades as the computing processing power and storage capacity increases. Other databases types such as [Graph Databases](https://en.wikipedia.org/wiki/Graph_database) or [Hierarchical Databases](https://en.wikipedia.org/wiki/Hierarchical_database_model) were introduced by the same time, but they were too complex by its time and helped Relational Databases to _win_ over the them into developers preference.
+Initially proposed in [the 70's](https://en.wikipedia.org/wiki/Relational_database), RDBMS (*Relational Database Management System*) has grown in popularity over the latest decades as the computing processing power and storage capacity increases. Other databases types such as [Graph Databases](https://en.wikipedia.org/wiki/Graph_database) or [Hierarchical Databases](https://en.wikipedia.org/wiki/Hierarchical_database_model) were introduced by the same time, but they were too complex by its time and helped Relational Databases to _win_ over them into developers preference.
 
 Another critical characteristic of RDBMS systems is the support for [ACID transactions](https://en.wikipedia.org/wiki/ACID_(computer_science)) (*Atomicity, Consistency, Isolation, Durability*) which guarantee data consistency even in a concurrent environment without the developer need to be fully aware.
 
@@ -29,7 +29,7 @@ Another critical characteristic of RDBMS systems is the support for [ACID transa
 
 First and foremost, you'll need to clone this post's [GitHub repository](https://github.com/oktadeveloper/okta-postgresql-spring-boot-example) that helps you if you have any doubts. Carefully selected branches are available to help you on each step of this article if you need any assistance.
 
-You will also need PostgreSQL to run the tutorial. To install and test PostgreSQL I recommend using Docker:
+You will also need PostgreSQL to run the tutorial. To install and test PostgreSQL, I recommend using Docker:
 
 ```bash
 docker pull postgres:11
@@ -38,13 +38,13 @@ docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpasswor
 docker exec dev-postgres psql -U postgres -c"CREATE DATABASE coursedb" postgres
 ```
 
-The command above should run in any Linux, Windows, or MacOS distribution that has an instance of Docker installed. The first line pulls PostgreSQL version 11; the second line initiates a new instance of it with the name `dev-postgres,` running on port `5432`. The latest line executes a DDL command to create the database `coursedb` into the instance. Keep in mind you are not creating a volume for the storage data so once the container is deleted, all its data wil be deleted as well.
+The command above should run in any Linux, Windows, or MacOS distribution that has an instance of Docker installed. The first line pulls PostgreSQL version 11; the second line initiates a new instance of it with the name `dev-postgres,` running on port `5432`. The latest line executes a DDL command to create the database `coursedb` into the instance. Keep in mind you are not creating a volume for the storage data so once the container is deleted, all its data will be deleted as well.
 
 Please, keep in mind you must have [Docker](https://docs.docker.com/install) installed.
 
 ## Create Spring Boot App
 
-**TIP:** If you’d like to skip this section, you can simply clone this post’s repo and checkout the `start` branch:
+**TIP:** If you’d like to skip this section, you can simply clone this post’s repo and check out the `start` branch:
 
 ```
 git clone -b start https://github.com/oktadeveloper/okta-postgresql-spring-boot-example.git
@@ -89,14 +89,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class SpringBootPostgressqlApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootPostgressqlApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootPostgressqlApplication.class, args);
+    }
 }
-
 ```
 
-Configuration annotations in Spring allow you to set up your application using _type safe_ code. This means if something becomes inconsistent with your configuration, the it will show compilation errors. The feature is a nice evolution from the older XML-based configuration Spring used to have. Previously, it was possible to get runtime errors since XML and your code was not linked.
+Configuration annotations in Spring allow you to set up your application using _type safe_ code. This means if something becomes inconsistent with your configuration, it will show compilation errors. The feature is a nice evolution from the older XML-based configuration Spring used to have. Previously, it was possible to get runtime errors since XML and your code was not linked.
 
 Update `/src/main/resources/application.properties` to define your database connection properties:
 
@@ -108,7 +107,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=create
 ```
 
-Here's quick explanation of each property:
+Here's a quick explanation of each property:
 
 * `spring.datasource.url` - describes the JDBC connection URL. Each RDBMS (like PostgreSQL, MySQL, Oracle, etc.) has its format. The IP `192.168.99.100` is the assigned by Docker to the host machine in Windows or MacOS machines. If you are running on Linux, you must change to `127.0.0.1` as the Docker Host is your machine.
 * `spring.datasource.username` - the username you will connect to the database. You are going to use the master user for this tutorial. **For production, you should create a limited user for each application**.
@@ -176,7 +175,6 @@ public class EntityWithUUID {
         this.id = UUID.randomUUID();
     }
 }
-
 ```
 
 There are some excellent annotations here:
@@ -265,7 +263,7 @@ public interface TeacherDAO extends CrudRepository<Teacher, UUID> {}
 
 ```
 
-You now  have DAOs for each entity. You may be asking where is the implementation for them? _Spring Data_ has some sweet and intelligent ways to handle this. Since your interfaces extend `CrudRepository`, automatically Spring generates the concrete class with all [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) related operations available!
+You now have DAOs for each entity. You may be asking where is the implementation for them? _Spring Data_ has some sweet and intelligent ways to handle this. Since your interfaces extend `CrudRepository`, automatically Spring generates the concrete class with all [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) related operations available!
 
 To fill some data, create a new service class called `DataFillerService`. It will be responsible for inserting data in the database as soon as the application starts.
 
@@ -398,9 +396,6 @@ These properties are going to tell Spring and Okta where are the OAuth 2.0 issue
 
 ... Issuer, clientId, what am I talking about? To test the application, you need to [create a free-forever account on Okta](https://developer.okta.com/signup/) and set up a few things.
 
->> @matt, this section was copied from https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server. What do you think?
->> @raphael: I think you should create a "web" application, rather than a service application. 
-
 In the Okta dashboard, create an application of type Service it indicates a resource server that does not have a login page or any way to obtain new tokens.
 
 <img src="/img/blog/postgresql-with-spring-boot/create-new-service.png" 
@@ -416,9 +411,11 @@ Now, start your application like before, but add two new environment variables:
 ```bash
 > ./mvnw spring-boot:run -DyourOktaDomain=${yourDomain} -Dclient_id=${yourClientID}
 ```
+
 Where `yourDomain` and `yourClientID` are the information provided by Okta's website.
 
 Run again `curl` (the `-v` attribute will return the response headers):
+
 ```bash
 > curl -v http://localhost:8080/courses
 < HTTP/1.1 401 
@@ -463,7 +460,8 @@ The token will be valid for one hour so you can do a lot of testing with your AP
 And its done!
 
 ## Versioning and Securing Database Version Changes
-**TIP:** use `git checkout migration` to skip this section
+
+**TIP:** Use `git checkout migration` to skip this section.
 
 Hibernate DDL creation is a nice feature for PoCs or small projects. For more significant projects that have a complex deployment workflow and features like version rollback in case of a significant issue, the solution is not sufficient.
 
@@ -624,7 +622,8 @@ You will see the same data exposed, but if you have a look into the logs, will n
 ```
 
 ## Scratching NoSQL Surface with Spring Boot and PostgreSQL's JSONB Data Structure
-**TIP:** use `git checkout jsonb` to skip this section
+
+**TIP:** Use `git checkout jsonb` to skip this section.
 
 [NoSQL databases](https://en.wikipedia.org/wiki/NoSQL) are, as the name says, databases that do not store their data with relationships. There are many types of NoSQL databases: graph databases, key-value stores, document, etc. Generally speaking, one of the most significant advantages of this kind of database is the lack of schema enforcement (you can mix a different kind of data), different levels of data consistency and better performance in some cases.
 
@@ -704,7 +703,6 @@ public class Teacher extends EntityWithUUID {
     @Column(columnDefinition = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     private List<Review> reviews;
-
 }
 ```
 
@@ -829,7 +827,7 @@ public class TeacherController {
 
 In `SimpleTeacherService`, note that there  is an annotation `@Transactional(isolation = Isolation.SERIALIZABLE)`. It means every call to this method runs in the most secure transaction level. In other words, once the code reads the `reviews` JSON value, no other code can read or write on the `reviews` column (it is blocked) until the transaction finishes. Why's that? Since you are manipulating JSON content, if a concurrent transaction updates the column, one of them will have consistency problems.
 
-You can now run
+You can now start your app:
 
 ```bash
 ./mvnw spring-boot:run
@@ -854,7 +852,7 @@ In this tutorial, we explore the integration with Spring Boot and PostgreSQL and
 
 There is plenty of knowledge to learn about JPA, Hibernate and PostgreSQL. Please refer to the following articles if you are interested in learning more:
 
-* [Create a Secure Spring REST API](https://developer.okta.com/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server)
-* [Build a Basic App with Spring Boot and JPA using PostgreSQL](https://developer.okta.com/blog/2018/12/13/build-basic-app-spring-boot-jpa)
-* [Use React and Spring Boot to Build a Simple CRUD App](https://developer.okta.com/blog/2018/07/19/simple-crud-react-and-spring-boot)
-* [Build a Basic CRUD App with Angular 7.0 and Spring Boot 2.1 ](https://developer.okta.com/blog/2018/08/22/basic-crud-angular-7-and-spring-boot-2)
+* [Create a Secure Spring REST API](/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server)
+* [Build a Basic App with Spring Boot and JPA using PostgreSQL](/blog/2018/12/13/build-basic-app-spring-boot-jpa)
+* [Use React and Spring Boot to Build a Simple CRUD App](/blog/2018/07/19/simple-crud-react-and-spring-boot)
+* [Build a Basic CRUD App with Angular 7.0 and Spring Boot 2.1 ](/blog/2018/08/22/basic-crud-angular-7-and-spring-boot-2)
