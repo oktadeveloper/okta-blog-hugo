@@ -6,7 +6,7 @@ date: 2018-12-20T00:00:00Z
 description: "This article presents how a developer can integrate Spring Boot and PostgreSQL, using some exclusive property and NoSQL column types"
 tags: [postgresql, sql, nosql, jpa, hibernate, java, spring boot]
 tweets:
-- "In doubt how to integrate Spring Boot and Hibernate? This article is for you!"
+- "In doubt how to integrate Spring Boot and PostgreSQL? This article is for you!"
 - "Use PostgreSQL as a NoSQL database with Spring Boot!"
 image: blog/featured/okta-java-short-skew.jpg
 ---
