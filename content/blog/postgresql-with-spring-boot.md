@@ -872,6 +872,8 @@ curl -X POST \
 
 In this tutorial, we explore the integration with Spring Boot and PostgreSQL and even used some advanced technologies. 
 
+You can find the source code for this blog post [on GitHub](https://github.com/oktadeveloper/okta-postgresql-spring-boot-example).
+
 There is plenty of knowledge to learn about JPA, Hibernate and PostgreSQL. Please refer to the following articles if you are interested in learning more:
 
 * [Create a Secure Spring REST API](/blog/2018/12/18/secure-spring-rest-api#set-up-an-oauth-20-resource-server)
