@@ -306,6 +306,7 @@ dependencies {
     compile("org.springframework.security:spring-security-oauth2-client")  
     compile("org.springframework.security:spring-security-oauth2-resource-server")  
     compile("org.springframework.security:spring-security-oauth2-jose")
+    compile('com.okta.spring:okta-spring-boot-starter:1.0.0')
     ...
 }
 ```
@@ -313,12 +314,9 @@ dependencies {
 Create a new configuration file called `src/main/resources/application.yml`
 
 ```yaml
-spring:  
-  security:  
-    oauth2:  
-      resourceserver:  
-        jwt:  
-          issuerUri: https://{yourOktaDomain}/oauth2/default
+okta:
+  oauth2:
+    issuer: https://dev-533919.oktapreview.com/oauth2/default
 ```
 
 Create a `SecurityConfiguration.java` class in the `com.okta.springbootmongo` package:
@@ -480,6 +478,8 @@ The changes do two things:
  2. Restrict the POST `/kayaks` endpoint to **Admins**
 
 Most of the code changes relate to #1 (configuring WebFlux to extract group membership). For further reading on this, take a look at [Springs documentation on OAuth2 WebFlux](https://docs.spring.io/spring-security/site/docs/current/reference/html/webflux-oauth2.html). It's rather a lot of code to get Spring to read the authorities from the custom "groups" claim instead of the "scope" claim. (*It was the abundance of ceremony code like this that caused people to leave Java for Javascript - but then they created React/Redux/Saga/Thunk with undebuggable transliteration and a maze of reducers and actions such that adding one simple method requires editing about 85 places in a project and restarting my computer half the time, but I'm not bitter, it's cool*).
+
+*Soon an updated release of the Okta Spring Boot Starter will simplify this code by getting rid of the need for the GrantedAuthoritiesExtractor and you'll be able to set the groups claim in the application.yml file.*
 
 Our Group-based authorization policy is defined by these two lines:
 
