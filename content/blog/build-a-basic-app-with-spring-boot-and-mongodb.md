@@ -1,10 +1,14 @@
 ---
 layout: blog_post
-title: 'Build a Basic App with Spring Boot and MongoDB using Webflux'
+title: 'Build a Basic App with Spring Boot and MongoDB using WebFlux'
 author: andrewcarterhughes
 date: 2019-01-14T00:00:00Z
-description: "Build a resource server using Spring Boot, Webflux, and Spring Data MongoDB and implement Group-based authorization using Okta OAuth."
+description: "Build a resource server using Spring Boot, WebFlux, and Spring Data MongoDB and implement group-based authorization using Okta OAuth."
 tags: [security, jwt, token, authentication, sessions, mongodb, spring, spring data, webflux, reactive]
+tweets: 
+- "Learn how to build an OAuth 2.0 resource server with Spring Boot, WebFlux, and MongoDB."
+- "An excellent guide to securing your reactive API and implementing group-based authorization."
+image: todo
 ---
 
 ## Build a Basic App with Spring Boot and MongoDB 
@@ -47,6 +51,8 @@ Clone the starter project from the GitHub repository and check out the **start**
 git clone -b start https://github.com/oktadeveloper/okta-spring-boot-mongo-webflux-example.git
 ```
 
+// MR: This project doesn't use Spring Boot 2.1. Can you please upgrade it to use 2.1?
+
 The starter project is a simple Spring Boot starter project with the necessary dependencies already in the `build.gradle` file.
 
 Let's take a quick look at the dependencies:
@@ -87,10 +93,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor  
 @NoArgsConstructor  
 public class Kayak {  
-  private String name;  
-  private String owner;  
-  private Number value;  
-  private String makeModel;  
+    private String name;  
+    private String owner;  
+    private Number value;  
+    private String makeModel;  
 }
 ```
   
@@ -123,32 +129,33 @@ With the repository added, you have enough to manipulate the data programmatical
 
 Add the following `KayakController.java` class 
 ```java
-package com.okta.springbootmongo;  
-  
-import org.springframework.beans.factory.annotation.Autowired;  
-import org.springframework.stereotype.Controller;  
-import org.springframework.web.bind.annotation.*;  
-import reactor.core.publisher.Flux;  
+package com.okta.springbootmongo;
 
-@Controller  
-@RequestMapping(path = "/kayaks")  
-public class KayakController {  
-  
-  @Autowired  
-  private KayakRepository kayakRepository;  
-  
-  @PostMapping()  
-  public @ResponseBody  
-  Mono<Kayak> addKayak(@RequestBody Kayak kayak) {  
-    return kayakRepository.save(kayak);  
-  }  
-  
-  @GetMapping()  
-  public @ResponseBody  
-  Flux<Kayak> getAllKayaks() {  
-    return kayakRepository.findAll();  
-  }  
-  
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@Controller("/kayaks")
+public class KayakController {
+
+    private KayakRepository kayakRepository;
+
+    public KayakController(KayakRepository kayakRepository) {
+        this.kayakRepository = kayakRepository;
+    }
+
+    @PostMapping()
+    public @ResponseBody
+    Mono<Kayak> addKayak(@RequestBody Kayak kayak) {
+        return kayakRepository.save(kayak);
+    }
+
+    @GetMapping()
+    public @ResponseBody
+    Flux<Kayak> getAllKayaks() {
+        return kayakRepository.findAll();
+    }
 }
 ``` 
 
@@ -166,6 +173,12 @@ This class looks an awful lot like a relational, blocking version. A lot of behi
 At this point you have a fully operational kayak REST resource server. Before you test it, add the following method to you `MainApplication` class. This simply injects some test data into the database when the application loads.
 
 ```java
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import reactor.core.publisher.Flux;
+
+...
+
 @Bean  
 ApplicationRunner init(KayakRepository repository) {  
   
@@ -193,7 +206,7 @@ ApplicationRunner init(KayakRepository repository) {
 }
 ```
 
-HTTPie is a great command line utility that makes it easy to run requests against the resource server. If you don’t have HTTPie installed, install it using `brew install httpie`. Or head over to [their website](https://httpie.org/) and make it happen. Or just follow along.
+HTTPie is a great command line utility that makes it easy to run requests against the resource server. If you don't have HTTPie installed, install it using `brew install httpie`. Or head over to [their website](https://httpie.org/) and make it happen. Or just follow along.
 
 Make sure your Spring Boot app is running. If it isn't, start it using `./gradlew bootRun`.
 
@@ -205,8 +218,7 @@ You'll get this:
 HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 transfer-encoding: chunked
-```
-```json
+
 [
     {
         "makeModel": "NDK",
@@ -230,17 +242,18 @@ transfer-encoding: chunked
 ```
 
 Now try POST'ing a new kayak to the server.
+
 ```bash
 http POST :8080/kayaks name="sea2" owner="Andrew" value="500" makeModel="P&H"
 ```
 
 You should see:
+
 ```bash
 HTTP/1.1 200 OK
 Content-Length: 62
 Content-Type: application/json;charset=UTF-8
-```
-```json
+
 {
     "makeModel": "P&H",
     "name": "sea2",
@@ -271,27 +284,29 @@ Select **Single-Page App**.
 
 The default application settings are great, except that you need to add a **Login Redirect URI**: `https://oidcdebugger.com/debug`. You're going to use this in a moment to retrieve a test token.
 
-Also, note your **Client ID**, as you’ll need that in a moment.
+Also, note your **Client ID**, as you'll need that in a moment.
 
 <img src="/img/blog/build-a-basic-app-with-spring-boot-and-mongodb/screen3.png" 
      alt="Save Client ID." 
      width="600" 
      class="center-image">
+     
+// MR: Can you please re-do the last two screenshots in this section? The OIDC app names don't match.
 
 ## Configure Spring Boot WebFlux Server for Token Auth
 
 Now you need to update a few project files to configure Spring Boot for OIDC OAuth.
 
-Add the following dependencies to you `build.gradle` file:
+Add the following dependencies to your `build.gradle` file:
 
 ```groovy
 dependencies {
-  ...
-  compile("org.springframework.boot:spring-boot-starter-security")  
-  compile("org.springframework.security:spring-security-oauth2-client")  
-  compile("org.springframework.security:spring-security-oauth2-resource-server")  
-  compile("org.springframework.security:spring-security-oauth2-jose")
-  ...
+    ...
+    compile("org.springframework.boot:spring-boot-starter-security")  
+    compile("org.springframework.security:spring-security-oauth2-client")  
+    compile("org.springframework.security:spring-security-oauth2-resource-server")  
+    compile("org.springframework.security:spring-security-oauth2-jose")
+    ...
 }
 ```
 
@@ -309,28 +324,26 @@ spring:
 Create a `SecurityConfiguration.java` class in the `com.okta.springbootmongo` package:
 
 ```java
-package com.okta.springbootmongo;  
-  
-import org.springframework.context.annotation.Bean;  
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;  
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;  
-import org.springframework.security.config.web.server.ServerHttpSecurity;  
-import org.springframework.security.web.server.SecurityWebFilterChain;  
-  
-@EnableWebFluxSecurity  
-public class SecurityConfiguration {  
-    
-  @Bean  
-  public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {  
-    http  
-        .authorizeExchange()  
-        .anyExchange().authenticated()  
-        .and()  
-        .oauth2ResourceServer()  
-        .jwt();  
-    return http.build();  
-  }  
-    
+package com.okta.springbootmongo;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+
+@EnableWebFluxSecurity
+public class SecurityConfiguration {
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        http
+            .authorizeExchange()
+            .anyExchange().authenticated()
+            .and()
+            .oauth2ResourceServer()
+            .jwt();
+        return http.build();
+    }
 }
 ```
 
@@ -411,54 +424,53 @@ The **groups** claim carries the groups to which the user is assigned. The defau
 The `SecurityConfiguration` class also needs to be updated to use Group-based authorization. Update the Java file to match the following:
 
 ```java
-package com.okta.springbootmongo;  
-  
-import org.springframework.context.annotation.Bean;  
-import org.springframework.core.convert.converter.Converter;  
-import org.springframework.http.HttpMethod;  
-import org.springframework.security.authentication.AbstractAuthenticationToken;  
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;  
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;  
-import org.springframework.security.config.web.server.ServerHttpSecurity;  
-import org.springframework.security.core.GrantedAuthority;  
-import org.springframework.security.core.authority.SimpleGrantedAuthority;  
-import org.springframework.security.oauth2.jwt.Jwt;  
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;  
-import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;  
-import org.springframework.security.web.server.SecurityWebFilterChain;  
-import reactor.core.publisher.Mono;  
-  
-import java.util.Collection;  
-import java.util.stream.Collectors;  
-  
-@EnableWebFluxSecurity  
-public class SecurityConfiguration {  
-    
-  @Bean  
-  public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {  
-    http  
-        .authorizeExchange()  
-        .pathMatchers(HttpMethod.POST, "/kayaks/**").hasAuthority("Admin")  
-        .anyExchange().authenticated()  
-        .and()  
-        .oauth2ResourceServer()  
-        .jwt()  
-        .jwtAuthenticationConverter(grantedAuthoritiesExtractor());  
-    return http.build();  
-  }  
-    
-  static class GrantedAuthoritiesExtractor extends JwtAuthenticationConverter {  
-    protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {  
-      Collection<String> authorities = (Collection<String>)jwt.getClaims().get("groups");  
-      return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());  
-    }  
-  }  
-  
-  Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {  
-    GrantedAuthoritiesExtractor extractor = new GrantedAuthoritiesExtractor();  
-    return new ReactiveJwtAuthenticationConverterAdapter(extractor);  
-  }  
+package com.okta.springbootmongo;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+@EnableWebFluxSecurity
+public class SecurityConfiguration {
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        http
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.POST, "/kayaks/**").hasAuthority("Admin")
+            .anyExchange().authenticated()
+            .and()
+            .oauth2ResourceServer()
+            .jwt()
+            .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
+        return http.build();
+    }
+
+    @SuppressWarnings("unchecked")
+    static class GrantedAuthoritiesExtractor extends JwtAuthenticationConverter {
+        protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+            Collection<String> authorities = (Collection<String>) jwt.getClaims().get("groups");
+            return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        }
+    }
+
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+        GrantedAuthoritiesExtractor extractor = new GrantedAuthoritiesExtractor();
+        return new ReactiveJwtAuthenticationConverterAdapter(extractor);
+    }
 }
 ```
 
@@ -519,11 +531,13 @@ If you like, you can go to [jsonwebtoken.io](https://www.jsonwebtoken.io/) and d
 According to the permission scheme, this user should be able to list all kayaks but shouldn't be able to add a new kayak.
 
 Remember, store your token in a shell script like so:
+
 ```bash
 TOKEN=eyJraWQiOiI4UlE5REJGVUJOTnJER0VGaEExekd6bWJqREpSYTRTT1lhaGpsM3d4...
 ```
 
 Make a GET request to list all kayaks:
+
 ```bash
 http :8080/kayaks "Authorization: Bearer $TOKEN"
 ```
@@ -533,8 +547,7 @@ HTTP/1.1 200 OK
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Content-Type: application/json;charset=UTF-8
 ...
-```
-```json
+
 [
     {
         "makeModel": "NDK",
@@ -600,11 +613,13 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 
 That's it. In this tutorial you created Spring Boot WebFlux application with an embedded MongoDB database for persisting model classes and added a resource server to it. After that, the tutorial showed you how to add JWT token authentication using Okta OIDC OAuth. Finally, you saw how to use Okta and Spring to add Group-based authorization to specific endpoints in the controller.
 
-If you’d like to check out this complete project, you can find the repo on GitHub at: <https://github.com/oktadeveloper/okta-spring-boot-mongo-webflux-example>..
+If you'd like to check out this complete project, you can find the repo on GitHub at <https://github.com/oktadeveloper/okta-spring-boot-mongo-webflux-example>.
+
+// MR: Add a link to Part 1
 
 If you haven't already, check out Part 1 of this series: Build a Basic App with Spring Boot and JPA. It's the same app, but using a more traditional relational database and Spring MVC-style blocking web server.
 
-If you’d like to learn more about Spring Boot, Spring Security, or Okta, check out any of these great tutorials:
+If you'd like to learn more about Spring Boot, Spring Security, or Okta, check out any of these great tutorials:
 
 - [Build Reactive APIs with Spring WebFlux](/blog/2018/09/24/reactive-apis-with-spring-webflux)
 - [Get Started with Spring Boot, OAuth 2.0, and Okta](/blog/2017/03/21/spring-boot-oauth)
@@ -613,7 +628,8 @@ If you’d like to learn more about Spring Boot, Spring Security, or Okta, check
 - [Build a Secure API with Spring Boot and GraphQL](/blog/2018/08/16/secure-api-spring-boot-graphql)
 
 Here are some great resources from Spring:
+
 - [Going reactive with Spring Data]( https://spring.io/blog/2016/11/28/going-reactive-with-spring-data)
 - [OAuth2 WebFlux](https://docs.spring.io/spring-security/site/docs/current/reference/html/webflux-oauth2.html)
-- [https://spring.io/guides/gs/reactive-rest-service/](https://spring.io/guides/gs/reactive-rest-service/)  
-- [https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux)
+- [Building a Reactive RESTful Web Service](https://spring.io/guides/gs/reactive-rest-service/)  
+- [Spring WebFlux documentation](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux)
