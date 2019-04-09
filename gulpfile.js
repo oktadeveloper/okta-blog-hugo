@@ -13,16 +13,17 @@ gulp.task('pygments', function() {
         continueOnError: false,
         pipeStdout: false
     };
+    return options;
 });
 
 gulp.task('clean', function() {
-    del([
+    return del([
         'themes/okta/static/dist/js/**/*.min.js'
     ]);
 });
 
 gulp.task('minify-sass', function() {
-    gulp.src([
+    return gulp.src([
         './themes/okta/static/css/*.scss',
         './themes/okta/static/css/font-awesome/font-awesome.scss'])
         .pipe(sass().on('error', sass.logError))
@@ -31,31 +32,30 @@ gulp.task('minify-sass', function() {
 });
 
 gulp.task('copy-fonts', function() {
-    gulp.src([
+    return gulp.src([
         './themes/okta/static/fonts/*'])
         .pipe(gulp.dest('./themes/okta/static/dist/fonts/'));
 });
 
 gulp.task('animate.css', function() {
-    gulp.src([
+    return gulp.src([
         './themes/okta/static/css/animate.css'])
         .pipe(gulp.dest('./themes/okta/static/dist/'));
 });
 
 gulp.task('master.js', function() {
-    gulp.src([
+    return gulp.src([
         './themes/okta/static/js/vendor/jquery-2.2.4.min.js',
         './themes/okta/static/js/vendor/jquery.ba-hashchange.min.js',
         './themes/okta/static/js/vendor/jquery.swiftype.autocomplete.js',
-        './themes/okta/static/js/vendor/jquery.swiftype.search.js',
-        './themes/okta/static/js/vendor/master.js'
+        './themes/okta/static/js/vendor/jquery.swiftype.search.js'
     ])
         .pipe(concat('master.js'))
         .pipe(gulp.dest('./themes/okta/static/js/dist'));
 });
 
 gulp.task('myOkta.js', function() {
-    gulp.src([
+    return gulp.src([
         './themes/okta/static/js/vendor/jquery-2.2.4.min.js',
         './themes/okta/static/js/myOkta.js'
     ])
@@ -63,4 +63,4 @@ gulp.task('myOkta.js', function() {
         .pipe(gulp.dest('./themes/okta/static/js/dist'));
 });
 
-gulp.task('default', ['master.js', 'myOkta.js', 'minify-sass', 'copy-fonts']);
+gulp.task('default', gulp.series('master.js', 'myOkta.js', 'minify-sass', 'copy-fonts'));
