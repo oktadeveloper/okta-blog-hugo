@@ -13,8 +13,6 @@ image: blog/spring-reactive-programming/reactor-homepage.png
 ---
 :page-liquid:
 :source-highlighter: rouge
-:rouge-css: style
-:rouge-style: github
 
 Reactive programming allows you to build systems that are resilient to high load. Handling lots of traffic isn't a problem because the server is non-blocking and doesn't block client processes to wait for responses. The client cannot directly observe, or synchronize with, the execution that occurs on the server. When an API is struggling to handle requests, it should respond in a sensible way. It shouldn't fail to work or drop messages in an uncontrolled fashion. It should communicate that it is under stress to upstream components and get them to reduce load. This is known as "back-pressure" and is an important aspect of reactive programming.
 
