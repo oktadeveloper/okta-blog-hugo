@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "pregenerate": "gulp",
-    "generate": "hugo server --buildFuture",
+    "generate": "bundle exec hugo server --buildFuture --verboseLog --log --logFile hugo.log",
     "build-prod": "npm run generate build -- --verbose",
     "postbuild-prod": "bash scripts/post-build-prod.sh",
     "start": "npm run generate",
